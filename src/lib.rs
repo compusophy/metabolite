@@ -6,6 +6,7 @@
 //! proof and the solvency check are the same mechanism. Selection is
 //! bankruptcy. Zero dependencies; the world is a pure function of its seed.
 
+pub mod api;
 pub mod events;
 pub mod genesis;
 pub mod genome;
@@ -16,7 +17,10 @@ pub mod laws;
 pub mod ledger;
 pub mod mind;
 pub mod rng;
+#[cfg(not(target_arch = "wasm32"))]
 pub mod server;
+#[cfg(target_arch = "wasm32")]
+pub mod wasm;
 pub mod world;
 
 use laws::*;

@@ -53,7 +53,10 @@ src/genesis.rs   founding genomes (sessile/grazer/drifter/wolf/clan) + SCHOLAR
 src/rng.rs       splitmix64-seeded xorshift64* (the only randomness)
 src/hash.rs      FNV-1a-64 (world hash = the receipt)
 src/events.rs    feed ring + counters   src/json.rs  hand-rolled JSON
-src/server.rs    zero-dep HTTP: / /state /agent /physics /inject /control
+src/api.rs       the JSON API, pure (&World -> String; no sockets)
+src/server.rs    zero-dep HTTP shell over api (native only)
+src/wasm.rs      hand-rolled C ABI over api (wasm32 only; no bindgen)
+scripts/wasm.sh  world -> wasm -> one static dist/index.html (fetch shim)
 src/lib.rs       module roots + physics_card()   src/main.rs  CLI
 web/index.html   the observatory (single file, compiled in via include_str!)
 tests/physics.rs determinism, conservation, named exploits, scholar-solves,

@@ -23,11 +23,29 @@ another's. The full descent: [GENESIS.md](GENESIS.md).
 
 ```sh
 cargo run --release            # observatory at http://localhost:1618
-cargo run --release -- run --ticks 20000 --seed 7    # headless: one integer
+cargo run --release -- run --ticks 50000 --seed 44   # headless: one integer
+                               # (seed 44 prints the first native solve)
 cargo run --release -- card    # the physics card (paste it into any LLM)
-cargo test --release           # 10 physics tests: determinism, conservation,
-                               # spin/wash/spawn-bomb exploits, scholar-solves
+cargo test --release           # 19 physics tests: determinism, conservation,
+                               # spin/wash/spawn-bomb exploits, warm oracles
 ```
+
+**Serverless build** — the whole world compiled to wasm (hand-rolled C
+ABI, no bindgen, still zero deps) and inlined into one static page:
+
+```sh
+bash scripts/wasm.sh           # -> dist/index.html (~236 KB, world inside)
+```
+
+The same dashboard runs against either substrate: served by the native
+binary it observes a server-side world; opened as a static page, a shim
+reroutes its `fetch()` calls onto the wasm exports and the world runs in
+your tab (`?seed=N` picks the universe). Deploy `dist/` to any static
+host — `vercel.json` is set up so importing this repo into Vercel just
+works (output directory `dist`, no build step). One physics: browsers
+throttle background tabs, so the in-page world runs only while watched.
+The experiments live in [EXPERIMENTS.md](EXPERIMENTS.md) — including the
+first native solve (seed 44, tick 43,141, organism #35245).
 
 ## The world
 

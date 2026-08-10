@@ -9,5 +9,9 @@ license = "Apache-2.0"
 # the ledger, the HTTP server, the JSON, the RNG, the hash — all in-repo.
 [dependencies]
 
+# cdylib: the wasm build (scripts/wasm.sh) — the whole world in a page.
+[lib]
+crate-type = ["rlib", "cdylib"]
+
 [profile.release]
 opt-level = 3
