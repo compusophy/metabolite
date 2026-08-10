@@ -1,0 +1,13 @@
+[package]
+name = "metabolite"
+version = "0.1.0"
+edition = "2021"
+description = "A sealed ecology where fuel is money: organisms whose minds are wit programs, selected by solvency."
+license = "Apache-2.0"
+
+# The constitution: zero dependencies. std only. The mind-language (wit),
+# the ledger, the HTTP server, the JSON, the RNG, the hash — all in-repo.
+[dependencies]
+
+[profile.release]
+opt-level = 3
