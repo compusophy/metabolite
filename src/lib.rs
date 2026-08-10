@@ -88,9 +88,10 @@ pub fn physics_card() -> String {
          same field — mimicry is legal). Stand on or beside one; puzzle(dx,dy)\n\
          reads x; answer(dx,dy,y) pays the WHOLE escrow if y is exactly:\n\
          {tiers}\
-         Near misses are paid WARMTH: each unit of error quarters the payout,\n\
-         and the escrow drains as it is mined (a dry oracle moves on). Random\n\
-         guessing loses money; almost-right arithmetic earns it.\n\
+         Near misses are paid WARMTH: each unit of error halves the payout,\n\
+         and the escrow drains as it is mined (a dry oracle moves on). Blind\n\
+         guessing barely pays; almost-right arithmetic gets rich — and the\n\
+         payout you receive tells you how close you are. Learning is legal.\n\
          Unsolved oracles expire after {ORACLE_TTL} ticks (escrow burns) and move.\n\
          \n\
          Everything is deterministic from the seed. The world hash is the\n\

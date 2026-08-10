@@ -35,8 +35,9 @@ pub const SOUP_MIN: i64 = 20;
 pub const SOUP_MAX: i64 = 90;
 /// Founding and injected organisms' endowments.
 pub const GENESIS_ENDOW: u64 = 600;
-/// Injected organisms arrive well-provisioned — the observer is a patron.
-pub const INJECT_ENDOW: u64 = 1500;
+/// Injected organisms arrive well-provisioned — the observer is a patron,
+/// and study (empirical oracle-probing) is capital-intensive.
+pub const INJECT_ENDOW: u64 = 2500;
 /// Max ergs a cell can hold; sunlight past the cap is never minted.
 pub const CELL_CAP: u64 = 600;
 
@@ -86,12 +87,13 @@ pub const SPAWN_BURN: u64 = 30;
 /// A spawn needs endowment + burn + this reserve, un-escrowed.
 pub const SPAWN_RESERVE: u64 = 270;
 
-/// Warm oracles: a wrong answer with error e still pays escrow >> (2e) —
-/// each unit of error quarters the payout, so parameter-jitter becomes
-/// hill-climbing toward arithmetic. Random guessing stays unprofitable
-/// (expected warmth ~13e vs ~23e of thinking per attempt at tier I).
+/// Warm oracles: a wrong answer with error e still pays escrow >> e —
+/// each unit of error halves the payout, so guessing becomes
+/// hill-climbing toward arithmetic. Near tier-I oracles random probing is
+/// mildly positive-sum: temple beggars are the larval stage of
+/// empiricists, and their probing drains the escrow honestly.
 /// The escrow DRAINS as it is mined; a drained or solved oracle respawns.
-pub const WARMTH_SHIFT_PER_ERROR: u32 = 2;
+pub const WARMTH_SHIFT_PER_ERROR: u32 = 1;
 
 /// The golden tithe: every transfer between agents burns amount * 1618 /
 /// 100_000 (min 1). Wash trading is thermodynamically lossy.

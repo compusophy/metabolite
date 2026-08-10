@@ -405,6 +405,7 @@ impl World {
             let payout = self.ledger.escrow_to_agent(slot, me);
             self.agents[me].income += payout;
             self.counters.solves[tier] += 1;
+            self.counters.solve_log.push((self.tick, tier as u8));
             self.agents[me].solved += 1;
             self.feed.push(Event::Solve { tick: self.tick, id: me, tier, amt: payout });
             self.respawn_oracle(slot);

@@ -1,8 +1,10 @@
-//! The wasm ABI: hand-rolled C exports, no bindgen, no dependencies —
-//! the whole world compiled into a page. JS instantiates the module,
-//! drives ticks on a timer, and reads JSON through one out-buffer; the
-//! dashboard's fetch() calls are shimmed onto these exports, so the same
-//! index.html observes a server world or an in-page world identically.
+//! The wasm ABI: hand-rolled exports, no bindgen, no dependencies, and
+//! not a line of C anywhere — `extern "C"` is merely the calling
+//! convention wasm speaks; every byte is Rust. JS instantiates the
+//! module, drives ticks on a timer, and reads JSON through one
+//! out-buffer; the dashboard's fetch() calls are shimmed onto these
+//! exports, so the same index.html observes a server world or an
+//! in-page world identically.
 
 use crate::api;
 use crate::world::World;

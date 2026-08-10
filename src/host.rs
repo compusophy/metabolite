@@ -28,7 +28,7 @@ pub static CAPS: &[Cap] = &[
     Cap { name: "store", arity: 2, cost: COST_MEM, doc: "Write v to your memory slot (0-7). Returns v." },
     Cap { name: "roll", arity: 1, cost: COST_ROLL, doc: "A number in [0, n) from the world's deterministic dice." },
     Cap { name: "puzzle", arity: 2, cost: COST_PUZZLE, doc: "The oracle's challenge value x at cell (dx,dy), or -1 if no oracle there." },
-    Cap { name: "answer", arity: 3, cost: COST_ANSWER, doc: "Submit y to the oracle at (dx,dy). Exact: the whole escrow (oracle moves on). Near: warmth — each unit of error quarters the payout, mining the escrow down. No oracle: -1." },
+    Cap { name: "answer", arity: 3, cost: COST_ANSWER, doc: "Submit y to the oracle at (dx,dy). Exact: the whole escrow (oracle moves on). Near: warmth — each unit of error halves the payout, mining the escrow down. No oracle: -1." },
     Cap { name: "invest", arity: 1, cost: 1, doc: "Set what your future children are endowed at birth (clamped 100-1000, default 200). Parental investment is a gene: only your genome carries it forward." },
 ];
 

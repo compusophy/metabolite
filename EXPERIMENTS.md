@@ -149,6 +149,47 @@ the children carry the expensive genome without the founder's luck.
 Parental investment is necessary but not sufficient; the rest is
 evolution's job now that scholar genes compost into the pool.
 
+## Round 4 — the intelligence gains: learning within a lifetime
+
+The warmth gradient's deepest property had gone unused: **`answer()`
+returns the payout, and payout is monotone in closeness** — a standing
+organism can *feel how near it is*. Nothing in the physics prevented
+in-lifetime learning; no organism had ever done it.
+
+**The empiricist** (`genesis::EMPIRICIST`, in the observatory's INJECT
+panel) is the first learning organism: it knows no formulas. It probes an
+oracle, reads the warmth, remembers its best guess in memory slots,
+shrinks its search window, and converges — guess/feel/refine, funded by
+the warmth it mines while studying. In isolation it cracks **tier III**
+(the quintic, unsolved by anything before) in ~53 ticks: search → first
+warmth at error 4 → hill-climb → exact, collecting 5,174e en route.
+Pinned by `the_empiricist_learns_tier_three_without_the_formula`.
+
+Two lessons were bought on the way:
+
+- **Research discipline**: the first funded empiricist, granted 50,000e,
+  spent it all on children — `spawn()` fired every rich tick until the
+  research fund was a nursery and the scientist starved mid-study at
+  age 111. Its genome now reproduces only *between* studies
+  (`if x < 0 && energy() > 1400`). Grant management is a gene.
+- **Study is capital-intensive**: random probing over the full answer
+  space costs more than a founder's endowment. The genome now searches
+  the small range first (tier-I answers live under 64) and escalates
+  after 24 failures; the physics widened warmth to `escrow >> error`
+  (halving, not quartering), making near-miss income fund the study.
+
+**Field results** (cohorts at tick 2000, 50K ticks): the empiricist line
+itself solved on 2/3 seeds within its founders' lifetimes, and mined up
+to 9,608e of warmth. Dynasties still end at generation ~1 — learning is
+heritable (it's in the genome) but the capital to apply it is not yet.
+
+**The control result that matters most**: seeds with NO injection now
+show a native intelligence economy — seed 11 produced **2 exact native
+solves and 2,915e of mined warmth**, unaided, and warmth flows on every
+control seed. The halving turned near-answer probing into a viable
+native profession: temple beggars who occasionally become discoverers.
+Intelligence is no longer an event in this world; it is an industry.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the

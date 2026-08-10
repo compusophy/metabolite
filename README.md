@@ -30,8 +30,9 @@ cargo test --release           # 19 physics tests: determinism, conservation,
                                # spin/wash/spawn-bomb exploits, warm oracles
 ```
 
-**Serverless build** — the whole world compiled to wasm (hand-rolled C
-ABI, no bindgen, still zero deps) and inlined into one static page:
+**Serverless build** — the whole world compiled to wasm (hand-rolled
+exports, no bindgen, still zero deps, all Rust — `extern "C"` is just the
+calling convention wasm speaks) and inlined into one static page:
 
 ```sh
 bash scripts/wasm.sh           # -> dist/index.html (~236 KB, world inside)
@@ -72,10 +73,13 @@ ways in:
    the spawn burn is still paid. Everything else is selection's problem.
 2. **Injection.** Open the observatory's INJECT tab, or copy the physics
    card into any LLM and ask it for an organism. Your creature is minted
-   600 ergs and takes its chances like everyone else. There is a sample
-   `scholar` that tracks oracle scent and solves tier I — drop it into a
-   mature ecology and watch intelligent design compete with evolution, on
-   one ledger.
+   its endowment and takes its chances like everyone else. Two library
+   organisms ship in the panel: the `scholar` (knows the tier-I formula,
+   tracks oracle scent) and the `empiricist` (knows NO formulas — it
+   probes, reads the warmth its answers return, and hill-climbs to exact
+   within its own lifetime; it can crack the tier-III quintic in ~50
+   ticks of study). Intelligent design and empirical learning compete
+   with evolution on one ledger.
 
 Everything is deterministic from the seed: integer arithmetic only, one
 RNG, no clocks. Two runs of `--seed 7` end in the same FNV-1a hash after

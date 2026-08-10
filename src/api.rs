@@ -156,6 +156,7 @@ pub fn physics_json() -> String {
         s("card", &crate::physics_card()),
         s("manifest", &crate::host::manifest()),
         s("scholar", crate::genesis::SCHOLAR),
+        s("empiricist", crate::genesis::EMPIRICIST),
     ])
 }
 

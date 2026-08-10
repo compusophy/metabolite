@@ -57,6 +57,21 @@ pub const SEED_POP: &[(&str, &str, usize)] = &[
 /// A ready-to-inject organism for the README and the observatory's Inject
 /// panel: tracks oracle scent, solves tier I. Not part of genesis — drop it
 /// in yourself and watch intelligent design compete with evolution.
+/// The empiricist: the first LEARNING organism. It knows no formulas — it
+/// probes an oracle and reads the warmth its answer() returns (payout is
+/// monotone in closeness), remembers its best guess in memory, shrinks
+/// its search window, and converges. In-lifetime learning from economic
+/// feedback alone; it can crack any tier it can afford to study.
+/// mem: 1=best warmth, 2=step, 3=last x seen, 4=next guess, 5=best guess.
+pub const EMPIRICIST: &str = "\
+let x = puzzle(0,0);\n\
+if x < 0 { let s = scent(0,0); let sx = 0; let sy = 0; if scent(1,0) > s { s = scent(1,0); sx = 1; sy = 0; } if scent(-1,0) > s { s = scent(-1,0); sx = -1; sy = 0; } if scent(0,1) > s { s = scent(0,1); sx = 0; sy = 1; } if scent(0,-1) > s { s = scent(0,-1); sx = 0; sy = -1; } if sx == 0 && sy == 0 { sx = roll(3) - 1; sy = roll(3) - 1; } step(sx, sy); store(3, -1); }\n\
+if x >= 0 && load(3) != x { store(3, x); store(1, 0); store(2, 8); store(6, 0); store(4, roll(64)); store(5, 0); }\n\
+if x >= 0 { let w = answer(0, 0, load(4)); store(6, load(6) + 1); if w > load(1) { store(1, w); store(5, load(4)); } if load(1) < 1 && load(6) <= 24 { store(4, roll(64)); } if load(1) < 1 && load(6) > 24 { store(4, roll(512)); } if load(1) >= 1 { let st = load(2); if st < 1 { st = 1; } store(4, load(5) + roll(2 * st + 1) - st); store(2, st * 3 / 4); } }\n\
+harvest();\n\
+invest(1000);\n\
+if x < 0 && energy() > 1400 { spawn(); }";
+
 pub const SCHOLAR: &str = "\
 invest(700);\n\
 let x = puzzle(0,0);\n\

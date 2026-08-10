@@ -97,6 +97,37 @@ fn genesis_genomes_and_scholar_are_viable() {
         assert!(genome::viable(src).is_ok(), "genesis genome {name} must parse");
     }
     assert!(genome::viable(SCHOLAR).is_ok(), "the scholar must parse");
+    assert!(genome::viable(metabolite::genesis::EMPIRICIST).is_ok(), "the empiricist must parse");
+}
+
+/// The empiricist learns. Standing on a tier-III oracle — the quintic no
+/// organism has ever solved — it converges by warmth feedback alone: no
+/// formula in its genome, only guess/remember/refine. In-lifetime
+/// learning from economic signal, the round-4 thesis.
+#[test]
+fn the_empiricist_learns_tier_three_without_the_formula() {
+    let mut w = World::new(5);
+    let id = w.inject("empiricist", metabolite::genesis::EMPIRICIST).unwrap();
+    w.ledger.mint_agent(id, 50_000, true); // a funded research program
+    let oracle_cell = w
+        .oracles
+        .iter()
+        .find(|o| o.tier == 2 && w.occ[o.cell].is_none())
+        .expect("a free tier-III oracle")
+        .cell;
+    let old = World::cell_of(w.agents[id].x, w.agents[id].y);
+    w.occ[old] = None;
+    w.agents[id].x = oracle_cell % GRID;
+    w.agents[id].y = oracle_cell / GRID;
+    w.occ[oracle_cell] = Some(id);
+    for _ in 0..600 {
+        w.tick();
+        if w.counters.solves[2] > 0 {
+            break;
+        }
+    }
+    assert!(w.counters.solves[2] >= 1, "the empiricist must crack tier III by feedback alone");
+    assert!(w.agents[id].income > 0, "and be paid for the study");
 }
 
 /// Garbage never gets born, and the byte cap is a hard wall.
@@ -225,9 +256,13 @@ fn warm_oracles_pay_a_gradient_and_drain() {
     let correct = oracle_f(0, w.oracles[slot].x_val);
     let escrow0 = w.ledger.escrow(slot);
 
-    // Error of 1 → escrow >> 2.
+    // Error of 1 → escrow >> WARMTH_SHIFT_PER_ERROR.
     let warmth = w.act_answer(id, 0, 0, correct + 1);
-    assert_eq!(warmth, (escrow0 >> 2) as i64, "one unit of error quarters the payout");
+    assert_eq!(
+        warmth,
+        (escrow0 >> WARMTH_SHIFT_PER_ERROR) as i64,
+        "one unit of error halves the payout"
+    );
     assert_eq!(w.ledger.escrow(slot), escrow0 - warmth as u64, "warmth mines the escrow");
     assert_eq!(w.counters.solves[0], 0, "a near miss is not a solve");
 

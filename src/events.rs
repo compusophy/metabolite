@@ -63,6 +63,8 @@ pub struct Counters {
     pub solves: [u64; 3],
     pub warmth: u64,
     pub extinctions: u64,
+    /// (tick, tier) of every exact solve — the intelligence curve's data.
+    pub solve_log: Vec<(u64, u8)>,
 }
 
 pub struct Feed {

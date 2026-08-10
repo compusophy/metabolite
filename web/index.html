@@ -182,6 +182,7 @@ footer{flex:none;display:flex;justify-content:space-between;gap:16px;align-items
       <div class="row">
         <button id="injBtn" class="ctl big">⇣ INJECT</button>
         <button id="schBtn" class="ctl">load scholar</button>
+        <button id="empBtn" class="ctl">load empiricist</button>
       </div>
       <pre id="injOut" class="hidden"></pre>
       <p class="hint">copy the PHYSICS card to any LLM and ask it to write an organism.</p>
@@ -551,6 +552,10 @@ $('#scentBtn').onclick=()=>{
 // ---------- inject ----------
 $('#schBtn').onclick=()=>{
   if(PHYS&&PHYS.scholar){$('#injSrc').value=PHYS.scholar;if(!$('#injName').value)$('#injName').value='scholar';}
+  else{$('#injOut').className='diag';$('#injOut').textContent='physics not loaded yet';}
+};
+$('#empBtn').onclick=()=>{
+  if(PHYS&&PHYS.empiricist){$('#injSrc').value=PHYS.empiricist;if(!$('#injName').value)$('#injName').value='empiricist';}
   else{$('#injOut').className='diag';$('#injOut').textContent='physics not loaded yet';}
 };
 $('#injBtn').onclick=async()=>{

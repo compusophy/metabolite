@@ -16,7 +16,8 @@ fn main() {
         "run" => {
             let ticks: u64 = flag(&args, "--ticks").and_then(|v| v.parse().ok()).unwrap_or(5000);
             let scholar_at = flag(&args, "--scholar").and_then(|v| v.parse().ok());
-            headless(seed, ticks, scholar_at);
+            let empiricist_at = flag(&args, "--empiricist").and_then(|v| v.parse().ok());
+            headless(seed, ticks, scholar_at, empiricist_at);
         }
         "card" => print!("{}", metabolite::physics_card()),
         _ => {
@@ -27,7 +28,7 @@ fn main() {
 }
 
 /// Headless: the world as one reproducible integer.
-fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>) {
+fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>, empiricist_at: Option<u64>) {
     let mut w = World::new(seed);
     println!("metabolite · seed {seed} · {ticks} ticks");
     let report_every = (ticks / 10).max(1);
@@ -42,6 +43,14 @@ fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>) {
                 }
             }
             println!("tick {t}: scholar cohort injected as {scholar_ids:?}");
+        }
+        if Some(t) == empiricist_at {
+            for i in 0..4 {
+                if let Ok(id) = w.inject(&format!("empiricist-{i}"), metabolite::genesis::EMPIRICIST) {
+                    scholar_ids.push(id);
+                }
+            }
+            println!("tick {t}: empiricist cohort injected");
         }
         w.tick();
         // A solve is history: print the mind that did it, verbatim.
@@ -106,6 +115,21 @@ fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>) {
             println!("    {line}");
         }
     }
+    // The intelligence curve: exact solves per 5K-tick epoch, by tier.
+    if !w.counters.solve_log.is_empty() {
+        println!("\nintelligence curve (solves per 5K-tick epoch, I/II/III):");
+        let epochs = (ticks / 5000 + 1) as usize;
+        let mut hist = vec![[0u32; 3]; epochs];
+        for &(t, tier) in &w.counters.solve_log {
+            hist[(t / 5000) as usize][tier as usize] += 1;
+        }
+        for (i, h) in hist.iter().enumerate() {
+            if h.iter().any(|&c| c > 0) {
+                println!("  {:>6}..{:<6} · {:>3} / {:>3} / {:>3}", i * 5000, (i + 1) * 5000, h[0], h[1], h[2]);
+            }
+        }
+    }
+
     // Falsifier 1: does the ecology learn? Efficiency by generation band.
     let done: Vec<_> = w.agents.iter().filter(|a| a.spent >= 500).collect();
     let maxgen = done.iter().map(|a| a.generation).max().unwrap_or(0) as u64;
