@@ -36,6 +36,9 @@ pub struct Agent {
     pub income: u64,
     /// Lifetime ergs burned being alive: fuel + basal (not transfers).
     pub spent: u64,
+    /// What this agent endows its children (set by invest(); not
+    /// inherited as state — the gene that sets it is the inheritance).
+    pub endow: u64,
 }
 
 pub struct Oracle {
@@ -178,9 +181,15 @@ impl World {
         (0..CELLS).find(|&c| self.occ[c].is_none())
     }
 
+    /// Oracles bask where the light is: they respawn within the sun's
+    /// neighborhood, because that is where life clusters — a bounty nobody
+    /// ever walks past selects for nothing.
     fn free_oracle_cell(&mut self) -> usize {
+        let (sx, sy) = self.sun_pos();
         for _ in 0..64 {
-            let c = self.rng.below(CELLS as u64) as usize;
+            let dx = self.rng.range(-10, 10);
+            let dy = self.rng.range(-10, 10);
+            let c = Self::cell_of(Self::wrap(sx + dx), Self::wrap(sy + dy));
             if !self.oracles.iter().any(|o| o.cell == c) {
                 return c;
             }
@@ -229,6 +238,7 @@ impl World {
             name: None,
             income: 0,
             spent: 0,
+            endow: SPAWN_ENDOW,
         });
         self.occ[cell] = Some(id);
         id
@@ -326,8 +336,17 @@ impl World {
         self.scent[cell]
     }
 
+    pub fn act_invest(&mut self, me: usize, amt: i64) -> i64 {
+        let clamped = (amt.max(0) as u64).clamp(ENDOW_MIN, ENDOW_MAX);
+        self.agents[me].endow = clamped;
+        clamped as i64
+    }
+
     pub fn act_spawn(&mut self, me: usize) -> i64 {
-        if self.alive_count() >= MAX_POP || self.ledger.agent(me) < SPAWN_MIN {
+        let endow = self.agents[me].endow;
+        if self.alive_count() >= MAX_POP
+            || self.ledger.agent(me) < endow + SPAWN_BURN + SPAWN_RESERVE
+        {
             return 0;
         }
         // A free adjacent cell, fixed scan order (deterministic).
@@ -364,7 +383,7 @@ impl World {
         let lineage = self.agents[me].lineage;
         let generation = self.agents[me].generation + 1;
         let child = self.new_agent(child_src, lineage, Some(me), generation, cell, desc.clone());
-        self.ledger.endow(me, child, SPAWN_ENDOW);
+        self.ledger.endow(me, child, endow);
         self.agents[me].kids += 1;
         self.counters.births += 1;
         self.feed.push(Event::Birth { tick: self.tick, child, parent: me, desc });
@@ -380,17 +399,31 @@ impl World {
         let cell = self.cell_at(me, dx, dy, 1);
         let Some(slot) = self.oracles.iter().position(|o| o.cell == cell) else { return -1 };
         let o = &self.oracles[slot];
-        if y != oracle_f(o.tier, o.x_val) {
-            return 0;
-        }
         let tier = o.tier;
-        let payout = self.ledger.escrow_to_agent(slot, me);
-        self.agents[me].income += payout;
-        self.counters.solves[tier] += 1;
-        self.agents[me].solved += 1;
-        self.feed.push(Event::Solve { tick: self.tick, id: me, tier, amt: payout });
-        self.respawn_oracle(slot);
-        payout as i64
+        let error = (y - oracle_f(tier, o.x_val)).unsigned_abs();
+        if error == 0 {
+            let payout = self.ledger.escrow_to_agent(slot, me);
+            self.agents[me].income += payout;
+            self.counters.solves[tier] += 1;
+            self.agents[me].solved += 1;
+            self.feed.push(Event::Solve { tick: self.tick, id: me, tier, amt: payout });
+            self.respawn_oracle(slot);
+            return payout as i64;
+        }
+        // Warmth: near misses mine the escrow — the gradient evolution
+        // climbs. A mined-dry oracle moves on like a solved one.
+        let shift = (error.min(31) as u32) * WARMTH_SHIFT_PER_ERROR;
+        let warmth = self.ledger.escrow(slot) >> shift.min(63);
+        if warmth > 0 {
+            let paid = self.ledger.escrow_partial(slot, me, warmth);
+            self.agents[me].income += paid;
+            self.counters.warmth += paid;
+            if self.ledger.escrow(slot) == 0 {
+                self.respawn_oracle(slot);
+            }
+            return paid as i64;
+        }
+        0
     }
 
     fn respawn_oracle(&mut self, slot: usize) {

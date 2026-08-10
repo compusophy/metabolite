@@ -58,8 +58,9 @@ pub const SEED_POP: &[(&str, &str, usize)] = &[
 /// panel: tracks oracle scent, solves tier I. Not part of genesis — drop it
 /// in yourself and watch intelligent design compete with evolution.
 pub const SCHOLAR: &str = "\
+invest(700);\n\
 let x = puzzle(0,0);\n\
 if x >= 0 { answer(0, 0, (2 * x + 1) % 64); }\n\
 if x < 0 { let s = scent(0,0); let sx = 0; let sy = 0; if scent(1,0) > s { s = scent(1,0); sx = 1; sy = 0; } if scent(-1,0) > s { s = scent(-1,0); sx = -1; sy = 0; } if scent(0,1) > s { s = scent(0,1); sx = 0; sy = 1; } if scent(0,-1) > s { s = scent(0,-1); sx = 0; sy = -1; } if sx == 0 && sy == 0 { sx = roll(3) - 1; sy = roll(3) - 1; } step(sx, sy); }\n\
 harvest();\n\
-if energy() > 700 { spawn(); }";
+if energy() > 1300 { spawn(); }";

@@ -201,6 +201,7 @@ fn state_json(world: &Arc<Mutex<World>>, ctrl: &Arc<Control>) -> String {
                 n("gifts", w.counters.gifts),
                 n("peeks", w.counters.peeks),
                 n("extinctions", w.counters.extinctions),
+                n("warmth", w.counters.warmth),
                 format!("\"solves\":[{},{},{}]", w.counters.solves[0], w.counters.solves[1], w.counters.solves[2]),
             ])
         ),

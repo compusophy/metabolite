@@ -32,6 +32,7 @@ fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>) {
     println!("metabolite · seed {seed} · {ticks} ticks");
     let report_every = (ticks / 10).max(1);
     let mut scholar_ids: Vec<usize> = Vec::new();
+    let mut solves_seen = 0u64;
     for t in 0..ticks {
         if Some(t) == scholar_at {
             // A colonization event is a cohort, not a castaway.
@@ -43,9 +44,28 @@ fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>) {
             println!("tick {t}: scholar cohort injected as {scholar_ids:?}");
         }
         w.tick();
+        // A solve is history: print the mind that did it, verbatim.
+        let total_solves: u64 = w.counters.solves.iter().sum();
+        if total_solves > solves_seen {
+            solves_seen = total_solves;
+            for ev in w.feed.ring.iter().rev() {
+                if let metabolite::events::Event::Solve { id, tier, amt, .. } = ev {
+                    let a = &w.agents[*id];
+                    println!(
+                        "\nSOLVE at tick {}: #{id} (lineage {}, gen {}) took {amt}e from oracle {} — its mind:",
+                        w.tick, a.lineage, a.generation, ["I", "II", "III"][*tier]
+                    );
+                    for line in a.genome.lines() {
+                        println!("    {line}");
+                    }
+                    println!("    (last mutation: {})\n", a.mutation);
+                    break;
+                }
+            }
+        }
         if (t + 1) % report_every == 0 {
             println!(
-                "tick {:>6} · pop {:>3} · born {:>5} · starved {:>5} · predated {:>4} · miscarried {:>4} · solves {:?} · hash {:016x}",
+                "tick {:>6} · pop {:>3} · born {:>5} · starved {:>5} · predated {:>4} · miscarried {:>4} · solves {:?} · warmth {:>6} · hash {:016x}",
                 w.tick,
                 w.alive_count(),
                 w.counters.births,
@@ -53,6 +73,7 @@ fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>) {
                 w.counters.predated,
                 w.counters.miscarriages,
                 w.counters.solves,
+                w.counters.warmth,
                 w.world_hash
             );
         }
@@ -65,7 +86,10 @@ fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>) {
     } else {
         alive.iter().map(|a| a.generation as u64).sum::<u64>() / alive.len() as u64
     };
+    let carriers = alive.iter().filter(|a| a.genome.contains("answer(")).count();
+    let carriers_ever = w.agents.iter().filter(|a| a.genome.contains("answer(")).count();
     println!("\navg generation of the living: {avg_gen}");
+    println!("answer-gene carriers: {carriers} alive / {carriers_ever} ever");
     for a in alive.iter().take(3) {
         println!(
             "\n#{} · lineage {} ({}) · gen {} · {}e · age {} · kids {} · last mutation: {}",

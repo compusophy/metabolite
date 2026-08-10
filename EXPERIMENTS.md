@@ -90,6 +90,65 @@ earns, but its reproduction is underfunded by the fixed endowment law.
 rounds. The 9-token tier-I expression remains undiscovered by mutation
 and compost alone.
 
+## Round 3 — gradients everywhere, cliffs nowhere
+
+Both surviving falsifiers had failed for one structural reason: cliffs.
+Native discovery (Q2) was a needle-in-a-haystack because oracles paid
+all-or-nothing; dynasties (Q3) died because endowment was a constant no
+gene could touch. Round 3 turned both cliffs into gradients:
+
+- **Warm oracles**: a wrong answer with error e pays `escrow >> 2e` —
+  each unit of error quarters the payout, the escrow drains as it is
+  mined, and a dry oracle moves on. Parameter-jitter became hill-climbing.
+- **`invest(amt)`**: parental endowment (clamped 100–1000) became a
+  capability — a *gene*, inherited only through the genome that sets it.
+- **Oracles bask in the sun**: they respawn near the light, where life
+  actually is. A bounty nobody walks past selects for nothing.
+
+**The bug that was the real wall.** First gradient runs: warmth = 0 on
+all seeds. A carrier census revealed why: **zero answer-genes had ever
+been born** — in ~250K cumulative births, ever, across every round. The
+codon template filler expanded *every* `{`, including the literal block
+braces of `if … { … }` codons, mangling every compound insertion into a
+miscarriage. Every "evolved" genome in rounds 1–2 was built exclusively
+from brace-free genes. This is the lineage's M2 lesson relearned in one
+generation: *every string a canonical artifact interpolates is an
+injection channel.* (Now pinned by a 300-fill parse test; miscarriage
+load dropped ~75% on the fix, and predation jumped 20× as `if occupied
+{ bite }` genes became insertable for the first time.)
+
+**Then, at seed 44, tick 43,141 — the first native solve.** Organism
+#35245, generation 11, lineage drifter, no scholar ancestry, no
+injection, assembled by mutation and selection alone:
+
+```
+step(roll(3) - 1, roll(3) - 1);
+harvest();
+if occupied(0,-1) == 1 { bite(-2,-2); }
+if light(0,0) > 15 { harvest(); }
+if energy() > 599 { spawn(); }
+if energy() > 1200 { spawn(); }
+if light(0,0) > 15 { harvest(); }
+if puzzle(0,0) >= 0 { answer(0, 0, (puzzle(0,0) * 56 + 59) % 218); }
+harvest();
+```
+
+`(56x + 59) % 218` is wrong in general and right on a subset of
+challenges — a lottery ticket, not a theory. It wandered, harvested,
+occasionally bit a neighbor, and when it crossed an oracle holding an x
+in its lucky set, it took the whole 500e. Replay `--seed 44` and it
+happens again, to the tick. **Q2 is answered: yes — but only after the
+physics offered a gradient, the oracles moved to where life is, and the
+gene became cheap enough to carry idle.** Warmth flowed on 5/5 seeds
+(34–928e); carriers arose 875–7,165 times per run.
+
+**Q3 after invest():** cohorts solved on 3/3 seeds (10 solves, up from
+4), and the scholar-solves test now finds the bounty already invested in
+a 700e child by tick's end. But dynasties still fizzle at generation ~1:
+the children carry the expensive genome without the founder's luck.
+Parental investment is necessary but not sufficient; the rest is
+evolution's job now that scholar genes compost into the pool.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the
@@ -97,9 +156,12 @@ and compost alone.
   genome, discovered independently on 5/5 seeds. The ecology optimizes
   *survival architecture*, not thermodynamic efficiency, because the
   binding constraint is death, not yield.
-- **Q2 (native oracle solve?)** Not yet observed. The tier-I expression is
-  ~9 tokens of exact arithmetic; the codon library provides the shape but
-  the parameters must jitter into place. Open.
+- **Q2 (native oracle solve?)** **YES** — seed 44, tick 43,141, organism
+  #35245 (round 3). It required three physics changes (warmth gradients,
+  sun-basking oracles, a cheap guarded gene) and one bug fix (the codon
+  injection channel). The discovery was not made *harder* by economics —
+  it was made *possible* by it: every enabling change was a change to
+  what pays.
 - **Q3 (injected intelligence: sweep or integrate?)** Neither — it
   *visits*. Founders solve (2/3 seeds, deterministically) and the live
   observatory saw a double-solver leave double the median offspring; but

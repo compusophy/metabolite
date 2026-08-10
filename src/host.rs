@@ -23,12 +23,13 @@ pub static CAPS: &[Cap] = &[
     Cap { name: "give", arity: 3, cost: COST_GIVE, doc: "Give amt ergs to the adjacent agent at (dx,dy). Tithed. Returns what they received, -1 if nobody there." },
     Cap { name: "peek", arity: 3, cost: COST_PEEK, doc: "Pay 4 ergs to the adjacent agent at (dx,dy) and read its memory slot. -1 if nobody there or you can't pay." },
     Cap { name: "emit", arity: 1, cost: COST_EMIT, doc: "Add v to the scent in your cell. Returns the new scent." },
-    Cap { name: "spawn", arity: 0, cost: COST_SPAWN, doc: "Reproduce into a free adjacent cell: costs 30 ergs burned + 200 endowed; needs 500 un-escrowed. Child = your genome, mutated, if it parses. 1 born, 0 failed." },
+    Cap { name: "spawn", arity: 0, cost: COST_SPAWN, doc: "Reproduce into a free adjacent cell: burns 30 ergs and endows the child your invest() amount (default 200); needs endowment + 300 un-escrowed. Child = your genome (sometimes crossed with a neighbor), mutated, if it parses. 1 born, 0 failed." },
     Cap { name: "load", arity: 1, cost: COST_MEM, doc: "Read your memory slot (0-7). Slots persist across ticks." },
     Cap { name: "store", arity: 2, cost: COST_MEM, doc: "Write v to your memory slot (0-7). Returns v." },
     Cap { name: "roll", arity: 1, cost: COST_ROLL, doc: "A number in [0, n) from the world's deterministic dice." },
     Cap { name: "puzzle", arity: 2, cost: COST_PUZZLE, doc: "The oracle's challenge value x at cell (dx,dy), or -1 if no oracle there." },
-    Cap { name: "answer", arity: 3, cost: COST_ANSWER, doc: "Submit y to the oracle at (dx,dy). Correct: its escrow is yours (returns the payout, oracle moves on). Wrong: 0. No oracle: -1." },
+    Cap { name: "answer", arity: 3, cost: COST_ANSWER, doc: "Submit y to the oracle at (dx,dy). Exact: the whole escrow (oracle moves on). Near: warmth — each unit of error quarters the payout, mining the escrow down. No oracle: -1." },
+    Cap { name: "invest", arity: 1, cost: 1, doc: "Set what your future children are endowed at birth (clamped 100-1000, default 200). Parental investment is a gene: only your genome carries it forward." },
 ];
 
 // Indices into CAPS — keep in lockstep with the table above.
@@ -50,6 +51,7 @@ const I_STORE: usize = 14;
 const I_ROLL: usize = 15;
 const I_PUZZLE: usize = 16;
 const I_ANSWER: usize = 17;
+const I_INVEST: usize = 18;
 
 /// The versioned ABI manifest: one line per capability, plus an FNV hash —
 /// change the physics and the number moves, on purpose.
@@ -109,6 +111,7 @@ impl<'a> Host for TickHost<'a> {
             I_ROLL => w.rng.below(a[0].max(0) as u64) as i64,
             I_PUZZLE => w.act_puzzle(me, a[0], a[1]),
             I_ANSWER => w.act_answer(me, a[0], a[1], a[2]),
+            I_INVEST => w.act_invest(me, a[0]),
             _ => -1, // unreachable: the evaluator resolves against CAPS
         }
     }

@@ -71,8 +71,9 @@ pub fn physics_card() -> String {
          TRANSFERS between organisms (bite, give, peek fees) burn a golden\n\
          tithe of 1.618%. Wash trading is thermodynamically lossy.\n\
          \n\
-         REPRODUCTION. spawn() needs {SPAWN_MIN}e un-escrowed: burns {SPAWN_BURN}e, endows the\n\
-         child {SPAWN_ENDOW}e, copies your genome through one random line-level\n\
+         REPRODUCTION. spawn() burns {SPAWN_BURN}e and endows the child what invest()\n\
+         set (default {SPAWN_ENDOW}e, clamp {ENDOW_MIN}-{ENDOW_MAX}); it needs endowment + {SPAWN_BURN}e + {SPAWN_RESERVE}e\n\
+         un-escrowed. It copies your genome through one random line-level\n\
          mutation (jitter a number, swap an operator, duplicate/delete/swap a\n\
          line, or splice a gene from the compost of the dead). A child that\n\
          fails to parse is a miscarriage — the burn is spent. Genome cap {GENOME_CAP}\n\
@@ -81,8 +82,11 @@ pub fn physics_card() -> String {
          ORACLES pay escrowed bounties for computation. Each exudes {ORACLE_SCENT}\n\
          scent/tick into its cell (scent decays 1/8 per tick; emit() writes the\n\
          same field — mimicry is legal). Stand on or beside one; puzzle(dx,dy)\n\
-         reads x; answer(dx,dy,y) pays out if y is exactly:\n\
+         reads x; answer(dx,dy,y) pays the WHOLE escrow if y is exactly:\n\
          {tiers}\
+         Near misses are paid WARMTH: each unit of error quarters the payout,\n\
+         and the escrow drains as it is mined (a dry oracle moves on). Random\n\
+         guessing loses money; almost-right arithmetic earns it.\n\
          Unsolved oracles expire after {ORACLE_TTL} ticks (escrow burns) and move.\n\
          \n\
          Everything is deterministic from the seed. The world hash is the\n\

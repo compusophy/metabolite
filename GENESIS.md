@@ -123,6 +123,16 @@ horizontal gene transfer as an estate sale.
    senescence (MAX_AGE, estates fall where the owner stood). Wealth must
    be mortal or the simulation of life becomes a simulation of banking.
 
+6. **The mutation pipeline is a canonical artifact; audit its channels.**
+   The codon template filler expanded literal block braces as placeholder
+   openers, so every compound codon (`if … { … }`) miscarried — for the
+   project's entire history, silently, while censuses showed "evolution"
+   built only from brace-free genes. M2's law, relearned: every string an
+   artifact interpolates is an injection channel; validate the channel,
+   then pin it (`every_filled_codon_is_viable`). The fix dropped
+   mutational load ~75%, raised predation 20×, and within one round
+   produced the world's first native oracle solve.
+
 ## The three questions only reality can answer (pre-registered)
 
 1. **Does evolution beat drift?** By tick 50K on ≥3 of 5 seeds, do evolved

@@ -52,8 +52,8 @@ pub const COST_EMIT: u64 = 2;
 pub const COST_SPAWN: u64 = 10;
 pub const COST_MEM: u64 = 1; // load / store
 pub const COST_ROLL: u64 = 1;
-pub const COST_PUZZLE: u64 = 2;
-pub const COST_ANSWER: u64 = 8;
+pub const COST_PUZZLE: u64 = 1;
+pub const COST_ANSWER: u64 = 6;
 
 /// Max ergs a single harvest() pulls from the cell.
 pub const HARVEST_MAX: u64 = 60;
@@ -75,12 +75,23 @@ pub const SCENT_DIV: u64 = 16;
 /// Scent cap per cell.
 pub const SCENT_CAP: i64 = 1_000_000;
 
-/// Minimum un-escrowed balance to attempt a spawn.
-pub const SPAWN_MIN: u64 = 500;
-/// Ergs endowed to the child at birth.
+/// Ergs endowed to the child at birth, by default. `invest(amt)` lets a
+/// parent set this within [ENDOW_MIN, ENDOW_MAX] — parental investment is
+/// an evolvable gene, inherited only through the genome that sets it.
 pub const SPAWN_ENDOW: u64 = 200;
+pub const ENDOW_MIN: u64 = 100;
+pub const ENDOW_MAX: u64 = 1000;
 /// Ergs burned by the act of reproduction (meiosis is not free).
 pub const SPAWN_BURN: u64 = 30;
+/// A spawn needs endowment + burn + this reserve, un-escrowed.
+pub const SPAWN_RESERVE: u64 = 270;
+
+/// Warm oracles: a wrong answer with error e still pays escrow >> (2e) —
+/// each unit of error quarters the payout, so parameter-jitter becomes
+/// hill-climbing toward arithmetic. Random guessing stays unprofitable
+/// (expected warmth ~13e vs ~23e of thinking per attempt at tier I).
+/// The escrow DRAINS as it is mined; a drained or solved oracle respawns.
+pub const WARMTH_SHIFT_PER_ERROR: u32 = 2;
 
 /// The golden tithe: every transfer between agents burns amount * 1618 /
 /// 100_000 (min 1). Wash trading is thermodynamically lossy.

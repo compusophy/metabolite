@@ -24,28 +24,39 @@ const CODONS: &[&str] = &[
     "emit({n});",
     "if roll({n}) == 0 { step({d},{d}); }",
     "if scent({r},{r}) > {n} { step({s},{s}); }",
-    "answer({s},{s}, (puzzle({s},{s}) * {n} + {n}) % {N});",
+    "if puzzle(0,0) >= 0 { answer(0, 0, (puzzle(0,0) * {n} + {n}) % {N}); }",
+    "invest({N});",
 ];
 
 fn fill(template: &str, rng: &mut Rng) -> String {
+    // Only `{k}` for a KNOWN key is a placeholder; every other `{` is a
+    // literal block brace. The first version expanded every `{`, mangling
+    // every compound codon into a miscarriage — zero if-codons were ever
+    // born in 47K births before the carrier census caught it. (The
+    // lineage's M2 lesson, relearned: every interpolated string is an
+    // injection channel.)
+    let b: Vec<char> = template.chars().collect();
     let mut out = String::new();
-    let mut chars = template.chars().peekable();
-    while let Some(c) = chars.next() {
-        if c == '{' {
-            let k = chars.next().unwrap_or(' ');
-            chars.next(); // consume '}'
-            let v = match k {
+    let mut i = 0;
+    while i < b.len() {
+        if b[i] == '{'
+            && i + 2 < b.len()
+            && b[i + 2] == '}'
+            && matches!(b[i + 1], 's' | 'd' | 'r' | 'n' | 'N' | 'm')
+        {
+            let v = match b[i + 1] {
                 's' => rng.range(-1, 1),
                 'd' => *[-1i64, 1].get(rng.below(2) as usize).unwrap_or(&1),
                 'r' => rng.range(-laws::SENSE_RADIUS, laws::SENSE_RADIUS),
                 'n' => rng.range(1, 64),
                 'N' => rng.range(64, 900),
-                'm' => rng.range(0, laws::MEM_SLOTS - 1),
-                _ => 0,
+                _ => rng.range(0, laws::MEM_SLOTS - 1), // 'm'
             };
             out.push_str(&v.to_string());
+            i += 3;
         } else {
-            out.push(c);
+            out.push(b[i]);
+            i += 1;
         }
     }
     out
@@ -187,6 +198,12 @@ fn pick<'a, T>(v: &'a [T], rng: &mut Rng) -> Option<&'a T> {
     } else {
         v.get(rng.below(v.len() as u64) as usize)
     }
+}
+
+/// A freshly filled codon (test hook — the pipeline every insert uses).
+pub fn random_codon(rng: &mut Rng) -> String {
+    let i = rng.below(CODONS.len() as u64) as usize;
+    fill(CODONS[i], rng)
 }
 
 /// Single-point line-level crossover: a prefix of one parent's genes, a

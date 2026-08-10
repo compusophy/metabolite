@@ -228,6 +228,15 @@ impl Ledger {
         amt
     }
 
+    /// Warmth: part of an escrow → a near-solver. Returns what moved.
+    pub fn escrow_partial(&mut self, slot: usize, id: usize, amt: u64) -> u64 {
+        let amt = amt.min(self.escrow[slot]);
+        self.escrow[slot] -= amt;
+        self.ensure(id);
+        self.agent_erg[id] += amt;
+        amt
+    }
+
     fn ensure(&mut self, id: usize) {
         if id >= self.agent_erg.len() {
             self.agent_erg.resize(id + 1, 0);

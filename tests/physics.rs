@@ -156,7 +156,30 @@ fn the_scholar_solves_oracle_one() {
     let before = w.ledger.agent(id);
     w.tick();
     assert_eq!(w.counters.solves[0], 1, "the scholar must solve tier I on contact");
-    assert!(w.ledger.agent(id) > before, "and be richer for it");
+    // The bounty may already be invested in a child (the scholar's genome
+    // endows 700e) — the FAMILY must be richer, wherever the ergs sit.
+    let family: u64 = w
+        .agents
+        .iter()
+        .filter(|a| a.alive && (a.id == id || a.lineage == id))
+        .map(|a| w.ledger.agent(a.id))
+        .sum();
+    assert!(family > before, "the dynasty must profit from the solve");
+}
+
+/// Every codon template, filled, must PARSE. The first template filler
+/// expanded literal block braces as placeholders and silently turned every
+/// compound codon into a miscarriage — no if-gene was ever born. Pinned.
+#[test]
+fn every_filled_codon_is_viable() {
+    let mut rng = metabolite::rng::Rng::new(3);
+    for _ in 0..300 {
+        let line = genome::random_codon(&mut rng);
+        assert!(
+            genome::viable(&line).is_ok(),
+            "a filled codon failed the grammar gate: {line}"
+        );
+    }
 }
 
 /// Sex obeys the same gate: hammer crossover across all genesis pairs —
@@ -180,6 +203,63 @@ fn crossover_respects_the_grammar_gate() {
     }
     // Line-level splices of one-statement-per-line parents parse near-always.
     assert!(viable * 10 >= total * 9, "only {viable}/{total} crossover children viable");
+}
+
+/// Warm oracles: near misses pay a quartering gradient and mine the
+/// escrow; exact answers take everything and move the oracle on. This is
+/// the law that makes native arithmetic discovery a climbable landscape.
+#[test]
+fn warm_oracles_pay_a_gradient_and_drain() {
+    let mut w = World::new(13);
+    let id = w.inject("prober", "harvest();").unwrap();
+    // Stand the prober next to a tier-I oracle (test surgery via occ map).
+    let slot = w.oracles.iter().position(|o| o.tier == 0).unwrap();
+    let ocell = w.oracles[slot].cell;
+    let target = (ocell + 1) % (GRID * GRID); // may wrap a row; adjacency via dx computed below
+    let old = World::cell_of(w.agents[id].x, w.agents[id].y);
+    w.occ[old] = None;
+    w.agents[id].x = ocell % GRID;
+    w.agents[id].y = ocell / GRID;
+    w.occ[ocell] = Some(id);
+    let _ = target;
+    let correct = oracle_f(0, w.oracles[slot].x_val);
+    let escrow0 = w.ledger.escrow(slot);
+
+    // Error of 1 → escrow >> 2.
+    let warmth = w.act_answer(id, 0, 0, correct + 1);
+    assert_eq!(warmth, (escrow0 >> 2) as i64, "one unit of error quarters the payout");
+    assert_eq!(w.ledger.escrow(slot), escrow0 - warmth as u64, "warmth mines the escrow");
+    assert_eq!(w.counters.solves[0], 0, "a near miss is not a solve");
+
+    // Far miss → nothing.
+    assert_eq!(w.act_answer(id, 0, 0, correct + 40), 0);
+
+    // Exact → the remaining escrow, and the oracle respawns funded.
+    let remaining = w.ledger.escrow(slot);
+    let paid = w.act_answer(id, 0, 0, correct);
+    assert_eq!(paid, remaining as i64);
+    assert_eq!(w.counters.solves[0], 1);
+    assert_eq!(w.ledger.escrow(slot), ORACLE_TIERS[0].1, "respawned with a fresh escrow");
+    assert!(w.ledger.conserved());
+}
+
+/// Parental investment is a gene: invest() sets the endowment (clamped),
+/// and children are born with exactly what their parent's genome chose.
+#[test]
+fn investment_is_an_evolvable_endowment() {
+    let mut w = World::new(21);
+    let id = w.inject("patron", "invest(5000);\nspawn();").unwrap();
+    w.ledger.mint_agent(id, 10_000, true);
+    w.tick();
+    assert_eq!(w.agents[id].endow, ENDOW_MAX, "invest clamps to the ceiling");
+    assert_eq!(w.agents[id].kids, 1, "rich patron spawns");
+    let child = w.agents.iter().find(|a| a.parent == Some(id)).expect("a child");
+    // Child was endowed ENDOW_MAX (minus whatever it burned in its ticks).
+    assert!(child.income + w.ledger.agent(child.id) <= ENDOW_MAX + child.income);
+    assert!(w.ledger.agent(child.id) > SPAWN_ENDOW, "born richer than the default");
+    // And the child's own endow SETTING is back at default — inheritance
+    // happens only through the genome (which carries the invest line).
+    assert_eq!(child.endow, SPAWN_ENDOW);
 }
 
 /// Oracle law sanity: the published formulas are the ones that pay.

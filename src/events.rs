@@ -61,6 +61,7 @@ pub struct Counters {
     pub gifts: u64,
     pub peeks: u64,
     pub solves: [u64; 3],
+    pub warmth: u64,
     pub extinctions: u64,
 }
 
