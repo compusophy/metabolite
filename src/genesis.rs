@@ -36,9 +36,20 @@ pub const SEED_POP: &[(&str, &str, usize)] = &[
          if occupied(-2,0) == 1 { step(-1,0); }\n\
          if occupied(0,2) == 1 { step(0,1); }\n\
          if occupied(0,-2) == 1 { step(0,-1); }\n\
+         if light(3,3) > light(0,0) + 30 { step(1,1); }\n\
+         if light(-3,-3) > light(0,0) + 30 { step(-1,-1); }\n\
          if roll(3) == 0 { step(roll(3) - 1, roll(3) - 1); }\n\
          harvest();\n\
          if energy() > 800 { spawn(); }",
+        8,
+    ),
+    (
+        "clan",
+        "if light(0,0) > 15 { harvest(); }\n\
+         if light(0,0) <= 15 { let b = light(2,0); let bx = 1; let by = 0; if light(0,2) > b { b = light(0,2); bx = 0; by = 1; } if light(-2,0) > b { b = light(-2,0); bx = -1; by = 0; } if light(0,-2) > b { b = light(0,-2); bx = 0; by = -1; } step(bx,by); harvest(); }\n\
+         if kin(1,0) == 1 && energy() > 450 { give(1,0, 60); }\n\
+         if kin(0,1) == 1 && energy() > 450 { give(0,1, 60); }\n\
+         if energy() > 650 { spawn(); }",
         8,
     ),
 ];

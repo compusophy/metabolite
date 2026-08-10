@@ -189,6 +189,23 @@ fn pick<'a, T>(v: &'a [T], rng: &mut Rng) -> Option<&'a T> {
     }
 }
 
+/// Single-point line-level crossover: a prefix of one parent's genes, a
+/// suffix of the other's. Sex is a splice; the grammar gate still rules.
+pub fn crossover(a: &str, b: &str, rng: &mut Rng) -> String {
+    let al: Vec<&str> = a.lines().collect();
+    let bl: Vec<&str> = b.lines().collect();
+    if al.is_empty() || bl.is_empty() {
+        return a.to_string();
+    }
+    let i = 1 + rng.below(al.len() as u64) as usize;
+    let j = rng.below(bl.len() as u64 + 1) as usize;
+    let mut child: Vec<&str> = Vec::new();
+    child.extend(&al[..i.min(al.len())]);
+    child.extend(&bl[j.min(bl.len())..]);
+    child.truncate(64);
+    child.join("\n")
+}
+
 /// The grammar gate: byte cap, then wit's parser. This is the only
 /// admission check a newborn faces; economics does the rest.
 pub fn viable(src: &str) -> Result<(), String> {

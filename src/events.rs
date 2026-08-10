@@ -55,6 +55,7 @@ pub struct Counters {
     pub miscarriages: u64,
     pub starved: u64,
     pub predated: u64,
+    pub aged: u64,
     pub crashed_runs: u64,
     pub bites: u64,
     pub gifts: u64,

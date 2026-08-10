@@ -115,6 +115,14 @@ horizontal gene transfer as an estate sale.
    The tragedy of the commons emerged from 40 hand-written lines in an
    afternoon — this is the project working, not failing.
 
+5. **Without death, economies freeze.** The falsifier runs (EXPERIMENTS.md)
+   found every seed converging on evolved immortal misers — spawn genes
+   deleted, multi-million-erg hoards, and finally whole worlds with zero
+   births for 9,000+ ticks: economic heat death, with regenesis never
+   firing because population never touched zero. The mechanical fix is
+   senescence (MAX_AGE, estates fall where the owner stood). Wealth must
+   be mortal or the simulation of life becomes a simulation of banking.
+
 ## The three questions only reality can answer (pre-registered)
 
 1. **Does evolution beat drift?** By tick 50K on ≥3 of 5 seeds, do evolved
@@ -139,6 +147,7 @@ the learnings back — the germline survives either way.
 - A verifier-reward CLI dumping `(genome, lifespan, earnings)` JSONL for a
   0.6B fine-tune (litelite's s5/p6/a8 protocol) — the trainer would be just
   another injector, paying spawn costs like everyone else.
-- Sexual recombination beyond compost splicing; lineage-aware kin visuals;
-  scrub-and-fork replay UI (Vivarium's grin) — determinism already permits
-  all three.
+- Lineage-aware kin visuals; scrub-and-fork replay UI — determinism
+  already permits both. (Sexual recombination landed the same day: spawn
+  does a single-point line crossover with an adjacent neighbor half the
+  time, before mutation; children keep the spawning parent's lineage.)

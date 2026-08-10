@@ -159,6 +159,29 @@ fn the_scholar_solves_oracle_one() {
     assert!(w.ledger.agent(id) > before, "and be richer for it");
 }
 
+/// Sex obeys the same gate: hammer crossover across all genesis pairs —
+/// children either parse or miscarry; the operation itself never panics,
+/// and line-structured parents mostly yield viable children.
+#[test]
+fn crossover_respects_the_grammar_gate() {
+    let mut rng = metabolite::rng::Rng::new(77);
+    let mut viable = 0u32;
+    let mut total = 0u32;
+    for (_, a, _) in SEED_POP {
+        for (_, b, _) in SEED_POP {
+            for _ in 0..100 {
+                let child = genome::crossover(a, b, &mut rng);
+                total += 1;
+                if genome::viable(&child).is_ok() {
+                    viable += 1;
+                }
+            }
+        }
+    }
+    // Line-level splices of one-statement-per-line parents parse near-always.
+    assert!(viable * 10 >= total * 9, "only {viable}/{total} crossover children viable");
+}
+
 /// Oracle law sanity: the published formulas are the ones that pay.
 #[test]
 fn oracle_formulas_are_the_published_law() {

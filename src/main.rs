@@ -15,7 +15,8 @@ fn main() {
     match mode {
         "run" => {
             let ticks: u64 = flag(&args, "--ticks").and_then(|v| v.parse().ok()).unwrap_or(5000);
-            headless(seed, ticks);
+            let scholar_at = flag(&args, "--scholar").and_then(|v| v.parse().ok());
+            headless(seed, ticks, scholar_at);
         }
         "card" => print!("{}", metabolite::physics_card()),
         _ => {
@@ -26,11 +27,21 @@ fn main() {
 }
 
 /// Headless: the world as one reproducible integer.
-fn headless(seed: u64, ticks: u64) {
+fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>) {
     let mut w = World::new(seed);
     println!("metabolite · seed {seed} · {ticks} ticks");
     let report_every = (ticks / 10).max(1);
+    let mut scholar_ids: Vec<usize> = Vec::new();
     for t in 0..ticks {
+        if Some(t) == scholar_at {
+            // A colonization event is a cohort, not a castaway.
+            for i in 0..4 {
+                if let Ok(id) = w.inject(&format!("scholar-{i}"), metabolite::genesis::SCHOLAR) {
+                    scholar_ids.push(id);
+                }
+            }
+            println!("tick {t}: scholar cohort injected as {scholar_ids:?}");
+        }
         w.tick();
         if (t + 1) % report_every == 0 {
             println!(
@@ -70,6 +81,36 @@ fn headless(seed: u64, ticks: u64) {
         for line in a.genome.lines() {
             println!("    {line}");
         }
+    }
+    // Falsifier 1: does the ecology learn? Efficiency by generation band.
+    let done: Vec<_> = w.agents.iter().filter(|a| a.spent >= 500).collect();
+    let maxgen = done.iter().map(|a| a.generation).max().unwrap_or(0) as u64;
+    if maxgen >= 4 {
+        println!("\nefficiency by generation band (income per 100 ergs burned; {} lives):", done.len());
+        for band in 0..4u64 {
+            let lo = maxgen * band / 4;
+            let hi = if band == 3 { maxgen + 1 } else { maxgen * (band + 1) / 4 };
+            let members: Vec<_> =
+                done.iter().filter(|a| (a.generation as u64) >= lo && (a.generation as u64) < hi).collect();
+            if members.is_empty() {
+                continue;
+            }
+            let n = members.len() as u64;
+            let eff = members.iter().map(|a| a.income * 100 / a.spent).sum::<u64>() / n;
+            let life = members.iter().map(|a| a.died.unwrap_or(w.tick) - a.born).sum::<u64>() / n;
+            println!("  gen {lo:>4}..{:<4} · lives {n:>6} · efficiency {eff:>4} · mean lifespan {life:>5}", hi - 1);
+        }
+    }
+    // Falsifier 3: the scholars' fate, if a cohort was injected.
+    if !scholar_ids.is_empty() {
+        let of_line = |a: &&metabolite::world::Agent| scholar_ids.contains(&a.lineage);
+        let descendants = w.agents.iter().filter(of_line).count();
+        let living = w.agents.iter().filter(of_line).filter(|a| a.alive).count();
+        let solves_by_line: u32 = w.agents.iter().filter(of_line).map(|a| a.solved).sum();
+        let max_gen = w.agents.iter().filter(of_line).map(|a| a.generation).max().unwrap_or(0);
+        println!(
+            "\nscholar cohort {scholar_ids:?}: {descendants} ever lived (deepest gen {max_gen}), {living} alive at end, {solves_by_line} oracle solves by the line"
+        );
     }
     println!("\nworld hash: {:016x}", w.world_hash);
     println!(

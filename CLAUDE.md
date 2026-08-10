@@ -48,8 +48,8 @@ src/world.rs     grid/torus, sun (integer trig), tick loop, spawn/death,
                  compost, regenesis-after-extinction, world hash (FNV)
 src/host.rs      the capability table (18 caps = the COMPLETE effect
                  surface) + TickHost + run_agent (tank escrow/settle)
-src/genome.rs    line-level mutation ops + codons + the grammar gate
-src/genesis.rs   founding genomes (sessile/grazer/drifter/wolf) + SCHOLAR
+src/genome.rs    line-level mutation ops + codons + crossover + grammar gate
+src/genesis.rs   founding genomes (sessile/grazer/drifter/wolf/clan) + SCHOLAR
 src/rng.rs       splitmix64-seeded xorshift64* (the only randomness)
 src/hash.rs      FNV-1a-64 (world hash = the receipt)
 src/events.rs    feed ring + counters   src/json.rs  hand-rolled JSON

@@ -32,7 +32,9 @@ cargo test --release           # 10 physics tests: determinism, conservation,
 ## The world
 
 A 40×40 torus under a sun that figure-eights across it, minting ~4,000
-ergs/tick of light into cells. Organisms sense (radius 3), step, harvest
+ergs/tick of light into cells. Five founding species: **sessile** (camp and
+harvest), **grazer** (chase the light), **drifter** (random walk),
+**wolf** (hunt the herds at the oasis), **clan** (graze and gift kin). Organisms sense (radius 3), step, harvest
 (diminishing returns — the gut fills), bite adjacent organisms, gift kin,
 **pay to read each other's memory** (surveillance-as-a-service, an old
 family recipe), lay scent, and spawn mutated children. Every transfer burns
@@ -45,9 +47,11 @@ ways in:
 
 1. **Evolution.** `spawn()` copies a genome through one line-level mutation
    — jitter a number, swap an operator, duplicate/delete/swap a line, or
-   splice a gene from the **compost** of the dead. The only gate is
-   grammar: a child that doesn't parse is a miscarriage, and the spawn burn
-   is still paid. Everything else is selection's problem.
+   splice a gene from the **compost** of the dead. Half the time, if anyone
+   stands adjacent, the child is first a single-point **crossover** with
+   them — sex is a splice, and gene flow does not ask about species. The
+   only gate is grammar: a child that doesn't parse is a miscarriage, and
+   the spawn burn is still paid. Everything else is selection's problem.
 2. **Injection.** Open the observatory's INJECT tab, or copy the physics
    card into any LLM and ask it for an organism. Your creature is minted
    600 ergs and takes its chances like everyone else. There is a sample

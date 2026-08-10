@@ -249,7 +249,7 @@ async function ctl(q){try{await fetch('/control?'+q,{method:'POST'});}catch(e){}
 // ---------- header / footer ----------
 function updateHeader(){
   $('#hTick').textContent=String(S.tick).padStart(8,'0');
-  $('#hEra').textContent=Math.floor(S.tick/1000);
+  $('#hEra').textContent=S.era||1;
   $('#hPop').textContent=S.pop;
   $('#hSeed').textContent=S.seed;
   $('#hHash').textContent=S.hash;
@@ -464,8 +464,11 @@ function renderStatic(d){
 }
 function renderDyn(d){
   const age=d.alive?(S?Math.max(0,S.tick-d.born):0):(d.died-d.born);
+  const eff=d.spent>0?(d.income/d.spent).toFixed(2):'—';
   const rows=[['age',fmt(age)],['balance',`<span style="color:var(--gold)">${fmt(d.e)} erg</span>`],
-    ['kids',fmt(d.kids)],['solved',fmt(d.solved)]];
+    ['kids',fmt(d.kids)],['solved',fmt(d.solved)],
+    ['income',fmt(d.income||0)],['burned',fmt(d.spent||0)],
+    ['efficiency',`<span style="color:var(--gold)">${eff}</span>`]];
   $('#agDyn').innerHTML=
     `<div class="statgrid">${rows.map(r=>`<div class="srow"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}</div>`+
     `<div class="sub">memory</div><div class="mems">${(d.mem||[]).map(v=>`<span class="mcell">${v}</span>`).join('')}</div>`+

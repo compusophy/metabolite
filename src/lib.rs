@@ -56,6 +56,8 @@ pub fn physics_card() -> String {
          listed cost; whatever you burn is gone from your balance. A crashed\n\
          run forfeits the whole tank. Existing costs {BASAL}/tick + 1 per {RENT_BYTES_PER_ERG}\n\
          genome bytes (big minds pay rent). Balance 0 at tick's end = death.\n\
+         So is age {MAX_AGE}: senescence is law, and your estate falls to the\n\
+         cell where you stood. Nothing is immortal; everything recycles.\n\
          \n\
          CAPABILITIES (the complete effect surface — nothing else exists):\n\
          {caps}\

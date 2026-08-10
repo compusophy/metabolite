@@ -93,6 +93,12 @@ pub const SENSE_RADIUS: i64 = 3;
 /// Population cap (space is the real cap; this bounds compute).
 pub const MAX_POP: usize = 400;
 
+/// Senescence. Without it, evolution finds the immortal-miser strategy
+/// (delete the spawn gene, hoard millions, never die) and whole worlds
+/// freeze into a dozen rentiers with zero births — observed on every
+/// experiment seed. Death recycles: the estate falls where they stood.
+pub const MAX_AGE: u64 = 6000;
+
 /// Oracles: cells that pay an escrowed bounty for a correct computation.
 /// The formulas are public law (see the physics card); discovering an
 /// expression that computes one is evolution's IQ test — or yours.

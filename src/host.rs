@@ -131,11 +131,13 @@ pub fn run_agent(world: &mut World, me: usize) {
     match result {
         Ok(out) => {
             world.ledger.settle_tank(me, tank, out.fuel_used);
+            world.agents[me].spent += out.fuel_used;
             world.agents[me].voice = out.output;
             world.agents[me].last_diag = None;
         }
         Err(diag) => {
             world.ledger.settle_tank(me, tank, tank);
+            world.agents[me].spent += tank;
             world.counters.crashed_runs += 1;
             world.agents[me].last_diag = Some(diag.render(&src));
         }

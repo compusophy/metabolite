@@ -32,6 +32,10 @@ pub struct Agent {
     pub solved: u32,
     pub bitten: bool,
     pub name: Option<String>,
+    /// Lifetime ergs taken in: harvest + bites + bounties + fees received.
+    pub income: u64,
+    /// Lifetime ergs burned being alive: fuel + basal (not transfers).
+    pub spent: u64,
 }
 
 pub struct Oracle {
@@ -223,6 +227,8 @@ impl World {
             solved: 0,
             bitten: false,
             name: None,
+            income: 0,
+            spent: 0,
         });
         self.occ[cell] = Some(id);
         id
@@ -274,12 +280,15 @@ impl World {
 
     pub fn act_harvest(&mut self, me: usize, cap: u64) -> i64 {
         let cell = Self::cell_of(self.agents[me].x, self.agents[me].y);
-        self.ledger.cell_to_agent(cell, me, cap) as i64
+        let got = self.ledger.cell_to_agent(cell, me, cap);
+        self.agents[me].income += got;
+        got as i64
     }
 
     pub fn act_bite(&mut self, me: usize, dx: i64, dy: i64) -> i64 {
         let Some(prey) = self.adjacent(me, dx, dy) else { return -1 };
         let (took, _) = self.ledger.transfer(prey, me, BITE_MAX);
+        self.agents[me].income += took;
         self.agents[prey].bitten = true;
         self.counters.bites += 1;
         if took > 0 {
@@ -291,6 +300,7 @@ impl World {
     pub fn act_give(&mut self, me: usize, dx: i64, dy: i64, amt: i64) -> i64 {
         let Some(to) = self.adjacent(me, dx, dy) else { return -1 };
         let (got, _) = self.ledger.transfer(me, to, amt.max(0) as u64);
+        self.agents[to].income += got;
         self.counters.gifts += 1;
         if got > 0 {
             self.feed.push(Event::Gift { tick: self.tick, from: me, to, amt: got });
@@ -303,7 +313,8 @@ impl World {
         if self.ledger.agent(me) < PEEK_FEE {
             return -1;
         }
-        self.ledger.transfer(me, to, PEEK_FEE);
+        let (fee, _) = self.ledger.transfer(me, to, PEEK_FEE);
+        self.agents[to].income += fee;
         self.counters.peeks += 1;
         self.feed.push(Event::Peek { tick: self.tick, from: me, to });
         self.agents[to].mem[slot.rem_euclid(MEM_SLOTS) as usize]
@@ -327,8 +338,24 @@ impl World {
             return 0;
         };
         self.ledger.burn_spawn(me, SPAWN_BURN);
-        let (child_src, desc) =
-            genome::mutate(&self.agents[me].genome.clone(), &mut self.rng, &self.compost);
+        // Sex: half the time, if anyone stands adjacent, the child is a
+        // single-point crossover with them before mutation. Gene flow does
+        // not ask about species; proximity is consent enough for microbes.
+        let mate = DIRS
+            .iter()
+            .filter_map(|&(dx, dy)| self.adjacent(me, dx, dy))
+            .next()
+            .filter(|_| self.rng.below(2) == 0);
+        let base = match mate {
+            Some(m) => {
+                genome::crossover(&self.agents[me].genome, &self.agents[m].genome, &mut self.rng)
+            }
+            None => self.agents[me].genome.clone(),
+        };
+        let (child_src, mut desc) = genome::mutate(&base, &mut self.rng, &self.compost);
+        if let Some(m) = mate {
+            desc = format!("{desc}, crossed with #{m}");
+        }
         if let Err(code) = genome::viable(&child_src) {
             self.counters.miscarriages += 1;
             self.feed.push(Event::Miscarriage { tick: self.tick, parent: me, code });
@@ -358,6 +385,7 @@ impl World {
         }
         let tier = o.tier;
         let payout = self.ledger.escrow_to_agent(slot, me);
+        self.agents[me].income += payout;
         self.counters.solves[tier] += 1;
         self.agents[me].solved += 1;
         self.feed.push(Event::Solve { tick: self.tick, id: me, tier, amt: payout });
@@ -431,14 +459,21 @@ impl World {
             }
             self.agents[me].bitten = false;
             let rent = BASAL + self.agents[me].genome.len() as u64 / RENT_BYTES_PER_ERG;
-            self.ledger.burn_basal(me, rent);
+            let paid = self.ledger.burn_basal(me, rent);
+            self.agents[me].spent += paid;
             crate::host::run_agent(self, me);
         }
 
-        // The reaping: insolvency is death.
+        // The reaping: insolvency is death, and so is old age (without
+        // senescence, immortal misers freeze whole worlds — see laws.rs).
         for me in 0..self.agents.len() {
-            if self.agents[me].alive && self.ledger.agent(me) == 0 {
-                self.die(me);
+            if !self.agents[me].alive {
+                continue;
+            }
+            if self.ledger.agent(me) == 0 {
+                self.die(me, false);
+            } else if self.tick - self.agents[me].born >= MAX_AGE {
+                self.die(me, true);
             }
         }
 
@@ -488,12 +523,22 @@ impl World {
         assert!(self.ledger.conserved(), "conservation violated at tick {}", self.tick);
     }
 
-    fn die(&mut self, me: usize) {
+    fn die(&mut self, me: usize, of_age: bool) {
         let cell = Self::cell_of(self.agents[me].x, self.agents[me].y);
-        self.ledger.agent_to_cell(me, cell); // detritus (usually 0 — they died broke)
+        // The estate falls where they stood. A dead broke forager drops 0;
+        // a dead miser drops a fortune, and the cell becomes a gold rush.
+        self.ledger.agent_to_cell(me, cell);
         self.occ[cell] = None;
-        let cause: &'static str = if self.agents[me].bitten { "predation" } else { "starvation" };
-        if self.agents[me].bitten {
+        let cause: &'static str = if of_age {
+            "old age"
+        } else if self.agents[me].bitten {
+            "predation"
+        } else {
+            "starvation"
+        };
+        if of_age {
+            self.counters.aged += 1;
+        } else if self.agents[me].bitten {
             self.counters.predated += 1;
         } else {
             self.counters.starved += 1;
