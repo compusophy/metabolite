@@ -187,8 +187,8 @@ impl World {
     fn free_oracle_cell(&mut self) -> usize {
         let (sx, sy) = self.sun_pos();
         for _ in 0..64 {
-            let dx = self.rng.range(-10, 10);
-            let dy = self.rng.range(-10, 10);
+            let dx = self.rng.range(-8, 8);
+            let dy = self.rng.range(-8, 8);
             let c = Self::cell_of(Self::wrap(sx + dx), Self::wrap(sy + dy));
             if !self.oracles.iter().any(|o| o.cell == c) {
                 return c;

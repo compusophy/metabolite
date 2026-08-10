@@ -133,6 +133,18 @@ horizontal gene transfer as an estate sale.
    mutational load ~75%, raised predation 20×, and within one round
    produced the world's first native oracle solve.
 
+7. **Inheritance runs through the gene pool, not the family.** Six
+   rounds of engineering dynasties (grants, annuities, position
+   inheritance, ambush learning) all died at generation ≤2; what worked
+   was putting the learning genome in the germline and letting scarcity
+   raise intelligence's wage share. Under the final physics, native
+   solves span every era of a 100K-tick run — including a native tier-III
+   solve ~300 generations after genesis — while every founding LINEAGE
+   dissolves. Thousands of answer-gene carriers circulate per run via
+   compost and crossover. "Code dies; knowledge survives" is no longer
+   just this project's doctrine; it is its reproducible experimental
+   result (EXPERIMENTS.md round 5).
+
 ## The three questions only reality can answer (pre-registered)
 
 1. **Does evolution beat drift?** By tick 50K on ≥3 of 5 seeds, do evolved

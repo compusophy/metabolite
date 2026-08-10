@@ -21,7 +21,9 @@ pub const RENT_BYTES_PER_ERG: u64 = 256;
 pub const GENOME_CAP: usize = 2048;
 
 /// Total sunlight minted into cells per tick (the only steady mint).
-pub const SUN_INFLUX: u64 = 4000;
+/// Squeezed from 4000 in round 5: when farming pays this well, cognition
+/// can never compete — intelligence needs a wage share of GDP.
+pub const SUN_INFLUX: u64 = 2800;
 /// Radius of the drifting sun spot, in cells.
 pub const SUN_RADIUS: i64 = 7;
 /// Ticks for the sun to complete one orbit of the grid.
@@ -44,7 +46,7 @@ pub const CELL_CAP: u64 = 600;
 /// Fuel costs of capabilities (burned from the one tank, per call).
 pub const COST_SENSE: u64 = 1; // light / occupied / kin / scent
 pub const COST_SELF: u64 = 0; // energy / age
-pub const COST_STEP: u64 = 6;
+pub const COST_STEP: u64 = 4;
 pub const COST_HARVEST: u64 = 3;
 pub const COST_BITE: u64 = 12;
 pub const COST_GIVE: u64 = 2;
@@ -81,7 +83,9 @@ pub const SCENT_CAP: i64 = 1_000_000;
 /// an evolvable gene, inherited only through the genome that sets it.
 pub const SPAWN_ENDOW: u64 = 200;
 pub const ENDOW_MIN: u64 = 100;
-pub const ENDOW_MAX: u64 = 1000;
+/// High enough to fully fund a researcher: the round-4 dynasties died
+/// because the investment ceiling sat below the cost of an education.
+pub const ENDOW_MAX: u64 = 2500;
 /// Ergs burned by the act of reproduction (meiosis is not free).
 pub const SPAWN_BURN: u64 = 30;
 /// A spawn needs endowment + burn + this reserve, un-escrowed.
@@ -115,11 +119,16 @@ pub const MAX_AGE: u64 = 6000;
 /// Oracles: cells that pay an escrowed bounty for a correct computation.
 /// The formulas are public law (see the physics card); discovering an
 /// expression that computes one is evolution's IQ test — or yours.
-pub const ORACLE_TTL: u64 = 600;
+/// Short: oracles must TURN OVER faster than organisms live, or they are
+/// static geography and ambush-learning (camp, harvest, wait for scent)
+/// can never work. At 200, a fresh oracle lands near a district camper
+/// every few dozen ticks.
+pub const ORACLE_TTL: u64 = 200;
 /// Tier definitions: (count, escrow, modulus). Formulas in `oracle_f`.
-/// Escrows are sized so that SOLVING PAYS: a scholar's hunt costs ~1,000
-/// ergs of thought; at 80e per solve intelligence was charity work.
-pub const ORACLE_TIERS: [(usize, u64, i64); 3] = [(5, 500, 64), (3, 1500, 199), (2, 4000, 509)];
+/// Escrows are sized so that STUDY pays: an empirical education (travel +
+/// probing to convergence) costs ~800-1,500 ergs; tier I priced below
+/// that made dynasties unaffordable (round 5's demographic transition).
+pub const ORACLE_TIERS: [(usize, u64, i64); 3] = [(8, 900, 64), (5, 2000, 199), (3, 5000, 509)];
 
 /// The oracle functions, tier-indexed. Public law: an organism (or its
 /// author) that encodes f(x) correctly gets the escrow.

@@ -99,6 +99,14 @@ fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>, empiricist_at: Optio
     let carriers_ever = w.agents.iter().filter(|a| a.genome.contains("answer(")).count();
     println!("\navg generation of the living: {avg_gen}");
     println!("answer-gene carriers: {carriers} alive / {carriers_ever} ever");
+    let census: Vec<String> = metabolite::genesis::SEED_POP
+        .iter()
+        .enumerate()
+        .map(|(k, (name, _, _))| {
+            format!("{name} {}", alive.iter().filter(|a| a.lineage == k).count())
+        })
+        .collect();
+    println!("living by founding lineage: {}", census.join(" · "));
     for a in alive.iter().take(3) {
         println!(
             "\n#{} · lineage {} ({}) · gen {} · {}e · age {} · kids {} · last mutation: {}",

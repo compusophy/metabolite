@@ -107,7 +107,14 @@ fn genesis_genomes_and_scholar_are_viable() {
 #[test]
 fn the_empiricist_learns_tier_three_without_the_formula() {
     let mut w = World::new(5);
-    let id = w.inject("empiricist", metabolite::genesis::EMPIRICIST).unwrap();
+    // Strip the reproduction genes: this test isolates LEARNING (a rich
+    // breeding empiricist spends the research grant on children, legally).
+    let monk: String = metabolite::genesis::EMPIRICIST
+        .lines()
+        .filter(|l| !l.contains("spawn") && !l.contains("give"))
+        .collect::<Vec<_>>()
+        .join("\n");
+    let id = w.inject("empiricist", &monk).unwrap();
     w.ledger.mint_agent(id, 50_000, true); // a funded research program
     let oracle_cell = w
         .oracles

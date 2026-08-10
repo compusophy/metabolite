@@ -190,6 +190,53 @@ control seed. The halving turned near-answer probing into a viable
 native profession: temple beggars who occasionally become discoverers.
 Intelligence is no longer an event in this world; it is an industry.
 
+## Round 5 — the inheritance problem
+
+Round 4 ended with dynasties dying at generation 1: learning was heritable
+(genome) but nothing else was. Six sub-rounds of hand-tuning attacked it:
+
+1. **Full-grant inheritance** (ENDOW_MAX 1000→2500, invest(2500), spawn
+   bar 3600): a demographic transition — founders could no longer afford
+   children at all ("4 ever lived, deepest gen 0"). The fully-funded-
+   education strategy priced reproduction out of existence.
+2. **Repriced education** (tier escrows 900/2000/5000 — tier I had been
+   priced for formula-knowers, not students): founders solved on 3/3
+   seeds and still never spawned; post-study balance (~2,300) sat just
+   under the bar.
+3. **The commute diagnosis**: a traced founder died at t22, burning
+   132/tick against 19/tick income, never reaching an oracle. The
+   bottleneck was never capital — a grant buys ~20 ticks and commutes
+   cost 30–80. Five of six educated children died in transit.
+4. **Position inheritance** (spawn at the study site, oracles basking
+   radius 8): generation 1 again, no further.
+5. **Ambush learning** (follow scent, else follow light, else STAND
+   STILL — camping in food is free) + **fast oracle turnover** (TTL
+   600→200, so oracles move faster than lifetimes and come to you):
+   generation 2, once. Still extinction.
+6. **The concession that solved it**: stop hand-tuning what evolution
+   explores 40,000 births at a time. The empiricist entered the
+   germline as a sixth founding species — reseeded at every genesis,
+   thresholds open to mutation, genes open to crossover — and the
+   pre-registered scarcity experiment ran: SUN_INFLUX 4000→2800, oracle
+   industry grown to 16 (8/5/3). When farming pays less and thinking
+   pays more, the wage share of intelligence rises.
+
+**The result (100K ticks, no injection, ever):** native solves in EVERY
+era of the world's history — seed 7: epochs 0–5K, 15–20K, 45–50K (tier
+II), **75–80K (tier III — the quintic, solved natively for the first
+time, ~300 generations after genesis)**, and 95–100K. Seed 1618: five
+separate solving epochs. Warmth mined: 14K–21K ergs per run — a
+permanent industry.
+
+**And the shape of the answer**: every founding lineage still dissolves
+— the census reads all-drifter — but 2,411–7,203 answer-gene carriers
+arise per run, continuously, assembled from compost splices and
+crossover. **Intelligence does not persist as a dynasty. It persists as
+circulating genes** — a profession individuals take up and pass on, not
+a bloodline. The lineage's own founding law ("code dies; knowledge
+survives") reproduced itself as an empirical result inside its own
+descendant: the family name is lost; the knowledge is immortal.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the
