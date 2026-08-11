@@ -13,10 +13,13 @@ Pre-registered test: for seeds run under BOTH conditions, compare learner
 share L/(L+I) pairwise; exact one-sided sign test (ties dropped) of
 H1: share(ephemeral) > share(eternal).
 """
+import io
 import math
 import re
 import sys
 from pathlib import Path
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
 
 def parse_log(path: Path):

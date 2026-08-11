@@ -102,3 +102,30 @@ cargo run --release         # observatory at http://localhost:1618
 ```
 
 If a hash differs, determinism broke: suspect any new use of iteration order, time, or floats. The world is one reproducible integer; this paper is its commentary.
+
+## Erratum (round 17): the pre-registered replication rejects the round-9 causal claim
+
+After this paper was drafted, the round-9 headline — "secret coefficients
+flipped the ratio: learners outsolved instinct" — was subjected to the
+controlled test it had never had: 16 fresh seeds, 100K ticks, ephemeral
+vs an `--eternal` control (per-tier coefficients drawn once per world),
+same binary, paired, with the hypothesis, classification rule, and exact
+sign test committed to version control before the first run, and all
+numbers produced by a versioned script (`scripts/analyze.py`), not by
+in-loop judgment.
+
+**H1 was rejected, and the direction reversed**: fourteen complete
+pairs, sign test +6/−8, one-sided p = 0.788; aggregate learner share 53%
+under ephemeral vs 63% under eternal. The round-9 observation stands as
+history (a before/after during a different physics era) but not as the
+causal claim this paper's abstract makes. The population-level
+mechanism the reversal suggests: every ephemeral respawn is a fresh
+lottery that some ticket in a diverse swarm may match (77 instinct
+solves), while an eternal world offers one coefficient triple that few
+tickets ever fit (57) — individual repeatability and population hit
+rate run in opposite directions. The claims this paper can still
+defend, per its own referees, are the hash-equality null standard
+(round 12) and the error-semantics/horizontal-spread result (rounds
+13–14), both untouched by this rejection. Pre-registration did its job
+on the first try, and this erratum is left in the paper on purpose: in
+this project, the corrections are load-bearing.

@@ -649,7 +649,41 @@ exact one-sided paired sign test on learner-share, ties dropped.
 Secondary (descriptive): aggregate learner/instinct counts and warmth
 per condition. RESULTS BELOW WERE WRITTEN AFTER THIS PARAGRAPH.
 
-RESULTS-PENDING-ROUND-17
+**RESULT: H1 REJECTED — and the direction reversed.** 29/32 logs
+delivered (one technician agent failed its pair; runs 9009-9010 partial
+— excluded from pairing per protocol). Fourteen complete pairs:
+
+- Sign test: **+6 / -8, one-sided p = 0.788.** No support for H1.
+- Aggregates: ephemeral 86 learner : 77 instinct (53% learner share);
+  eternal 98 : 57 (**63%**). The eternal condition — the one instinct
+  can inscribe — shows the HIGHER learner share.
+
+**Why the round-9 story fails at population scale.** The original claim
+reasoned about individuals: under ephemerality "nothing memorized solves
+twice," so tickets die. But a POPULATION holds hundreds of distinct
+ticket formulas, and every ephemeral respawn re-rolls the coefficients —
+a fresh lottery that some ticket in the swarm may match. Eternal worlds
+draw ONE coefficient triple per tier per world; few tickets ever match
+it. Ephemerality gives the ticket population MORE lottery draws, not
+fewer (instinct solves: 77 ephemeral vs 57 eternal — exactly this).
+Individual repeatability and population-level hit rate run in opposite
+directions, and the population wins.
+
+**Status of the round-9 result**: accurate as history (a before/after
+observation during a different physics era — no amber, no
+stratification, fatal unbound reads), invalid as the causal claim the
+paper headlined. The paper's central claim must be re-scoped to what
+survives: the learning MACHINERY's viability and spread (rounds 11-14)
+— which this experiment's 184 memory-using solves across 29 runs amply
+confirm — not a learner-vs-instinct selection flip. Pre-registration
+did its job on the first try.
+
+## Round 17 postscript
+
+The two claims the review called defensible (the hash-proven null; the
+error-semantics/horizontal-spread result) are untouched by this
+rejection. The claim it kills was the one we liked most. That is what
+the instrument is for.
 
 ## Standing answers
 
