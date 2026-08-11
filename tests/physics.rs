@@ -224,6 +224,21 @@ fn every_filled_codon_is_viable() {
     }
 }
 
+/// The bequest: a child is born with a copy of its parent's memory —
+/// the lesson travels with the genes, so a study can span generations.
+#[test]
+fn children_inherit_their_parents_memory() {
+    let mut w = World::new(17);
+    let id = w.inject("teacher", "store(5, 4242);\nspawn();").unwrap();
+    w.ledger.mint_agent(id, 10_000, true);
+    w.tick();
+    assert_eq!(w.agents[id].kids, 1, "the teacher must have spawned");
+    let child = w.agents.iter().find(|a| a.parent == Some(id)).expect("a child").id;
+    // The child has not yet run (newborns wait a tick): its memory is
+    // exactly the bequest.
+    assert_eq!(w.agents[child].mem[5], 4242, "the lesson must be inherited");
+}
+
 /// Amber: oracle-touching genes survive in the compost's protected
 /// stratum after the ordinary ring has flushed them. The death of the
 /// last mind must never again be the death of the idea.

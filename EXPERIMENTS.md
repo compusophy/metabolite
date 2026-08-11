@@ -467,6 +467,42 @@ The arc the loop has now built, layer by layer: energy became money
 from. The amber is this world's first cultural institution — and its
 worlds no longer need apocalypse to remember how to think.
 
+## Round 12 — loop iteration 6: the bequest, a null result proven by hash
+
+The mechanism: **memory inheritance** — children are born with a copy of
+the spawning parent's memory slots (`child.mem = parent.mem`, pinned by
+test), so a converged study could in principle continue across
+generations. The physics card: "Teach by living."
+
+**The result: provably inert.** The A/B runs on seeds 7 and 1618
+produced world hashes **identical to the iteration-5 baselines**
+(`d5f0b6cc3480939a`, `f9752a81332fed38`) — 200,000 ticks of history,
+bit-for-bit unchanged. Determinism upgraded a null result into a proof:
+across two full world-histories, not one organism ever behaved
+differently because of its inheritance. (This is the determinism
+dividend at its sharpest — most simulators could never distinguish "no
+effect" from "small effect.")
+
+**Why the bequest cannot work — and why that's the finding.** The
+empiricist's reset guard (`if load(3) != x { reset }`) discards
+inherited study state at any unfamiliar oracle — and it is RIGHT to:
+under ephemeral physics (round 9), a parent's converged best-guess is
+knowledge about coefficients that die with their oracle. The only
+scenario where inherited memory pays is seat-succession — a child taking
+its parent's exact seat mid-study before the oracle turns over — which
+occurred zero times in 400K observed ticks. Rounds 9 and 12 are in
+structural tension, now stated as law: **making problems ephemeral makes
+learning valuable and answers unbequeathable, by construction. In an
+ephemeral world you cannot inherit answers — only the ability to find
+them.** Which is precisely what the amber already transmits (genes for
+the search loop), and why round 11's resurrections worked where round
+12's bequests could not.
+
+The bequest stays in the physics (one line, provably harmless, and it
+becomes load-bearing the moment any durable knowledge exists). The
+iteration's yield is the theorem, honestly priced: one hour, one null,
+one law.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the

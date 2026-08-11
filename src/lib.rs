@@ -84,6 +84,8 @@ pub fn physics_card() -> String {
          line, or splice a gene from the compost of the dead). A child that\n\
          fails to parse is a miscarriage — the burn is spent. Genome cap {GENOME_CAP}\n\
          bytes. Write one statement per line: the LINE is the gene.\n\
+         Your child is born with a COPY of your memory slots: what you\n\
+         learned goes with them. Teach by living.\n\
          \n\
          ORACLES pay escrowed bounties for computation. Each exudes {ORACLE_SCENT}\n\
          scent/tick into its cell (scent decays 1/8 per tick; emit() writes the\n\

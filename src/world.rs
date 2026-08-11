@@ -392,6 +392,11 @@ impl World {
         let lineage = self.agents[me].lineage;
         let generation = self.agents[me].generation + 1;
         let child = self.new_agent(child_src, lineage, Some(me), generation, cell, desc.clone());
+        // The bequest: the child inherits a copy of the parent's memory
+        // slots. Genes carry the strategy; this carries the LESSON — a
+        // child born at the study site continues where the parent's
+        // convergence left off. Teaching, as physics.
+        self.agents[child].mem = self.agents[me].mem;
         self.ledger.endow(me, child, endow);
         self.agents[me].kids += 1;
         self.counters.births += 1;
