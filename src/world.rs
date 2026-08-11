@@ -54,6 +54,10 @@ pub struct Oracle {
 pub struct World {
     pub tick: u64,
     pub seed: u64,
+    /// Eternal mode (the round-17 experimental control): per-tier oracle
+    /// coefficients are drawn ONCE at genesis and shared by every
+    /// instance, so instinct can inscribe them. None = ephemeral (law).
+    pub eternal: Option<[(i64, i64); 3]>,
     pub rng: Rng,
     pub ledger: Ledger,
     pub agents: Vec<Agent>,
@@ -86,10 +90,15 @@ fn cos64(k: u64) -> i64 {
 
 impl World {
     pub fn new(seed: u64) -> Self {
+        Self::new_mode(seed, false)
+    }
+
+    pub fn new_mode(seed: u64, eternal: bool) -> Self {
         let n_oracles: usize = ORACLE_TIERS.iter().map(|t| t.0).sum();
         let mut w = World {
             tick: 0,
             seed,
+            eternal: None,
             rng: Rng::new(seed),
             ledger: Ledger::new(CELLS, n_oracles),
             agents: Vec::new(),
@@ -103,14 +112,26 @@ impl World {
             history: VecDeque::new(),
             world_hash: hash::FNV_OFFSET,
         };
+        if eternal {
+            let mut coeffs = [(0i64, 0i64); 3];
+            for (tier, c) in coeffs.iter_mut().enumerate() {
+                c.0 = 1 + w.rng.below(ORACLE_A_CEIL[tier]) as i64;
+                c.1 = w.rng.below(ORACLE_TIERS[tier].2 as u64) as i64;
+            }
+            w.eternal = Some(coeffs);
+        }
         // Oracles: one per slot, tiers expanded in order.
         let mut slot = 0;
         for (tier, &(count, _escrow, m)) in ORACLE_TIERS.iter().enumerate() {
             for _ in 0..count {
                 let cell = w.free_oracle_cell();
                 let x_val = w.roll_oracle_x(tier);
-                let a = 1 + w.rng.below(ORACLE_A_CEIL[tier]) as i64;
-                let b = w.rng.below(m as u64) as i64;
+                let (a, b) = match w.eternal {
+                    Some(c) => c[tier],
+                    None => {
+                        (1 + w.rng.below(ORACLE_A_CEIL[tier]) as i64, w.rng.below(m as u64) as i64)
+                    }
+                };
                 w.oracles.push(Oracle { tier, cell, x_val, a, b, expires: ORACLE_TTL });
                 w.ledger.mint_escrow(slot, ORACLE_TIERS[tier].1);
                 slot += 1;
@@ -445,8 +466,13 @@ impl World {
         let tier = self.oracles[slot].tier;
         let cell = self.free_oracle_cell();
         let x_val = self.roll_oracle_x(tier);
-        let a = 1 + self.rng.below(ORACLE_A_CEIL[tier]) as i64;
-        let b = self.rng.below(ORACLE_TIERS[tier].2 as u64) as i64;
+        let (a, b) = match self.eternal {
+            Some(c) => c[tier],
+            None => (
+                1 + self.rng.below(ORACLE_A_CEIL[tier]) as i64,
+                self.rng.below(ORACLE_TIERS[tier].2 as u64) as i64,
+            ),
+        };
         self.oracles[slot] = Oracle { tier, cell, x_val, a, b, expires: self.tick + ORACLE_TTL };
         self.ledger.mint_escrow(slot, ORACLE_TIERS[tier].1);
     }

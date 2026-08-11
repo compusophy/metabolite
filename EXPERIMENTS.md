@@ -628,6 +628,29 @@ and never before observed at this depth.
 Also this hour: CLAUDE.md refreshed to the current world (stratified
 amber, reads-as-zero, 25 tests) — the surface cap holds at 5,560/8,000.
 
+## Round 17 — loop iteration 11: the referee round (pre-registration)
+
+The paper review (three adversarial referees) identified two fatal
+apparatus gaps: numbers extracted by in-loop agents, and no controlled,
+powered test of the headline claim. This round fixes both.
+
+**New instruments**: `--eternal` mode (per-tier oracle coefficients drawn
+once at genesis, shared by every instance — the condition instinct can
+inscribe; ephemeral remains the law), and `scripts/analyze.py` — a
+deterministic parser and exact sign test. Numbers now come from the
+script, never from agents.
+
+**PRE-REGISTERED (before any run): H1** — under ephemeral oracles the
+learner share of solves exceeds the same seed's share under eternal
+oracles. Design: seeds 9001-9016, both conditions, 100K ticks, same
+binary. Classification (fixed in the script): learner-solve = SOLVE
+block using memory (`load(`/`store(`); instinct = no memory use. Test:
+exact one-sided paired sign test on learner-share, ties dropped.
+Secondary (descriptive): aggregate learner/instinct counts and warmth
+per condition. RESULTS BELOW WERE WRITTEN AFTER THIS PARAGRAPH.
+
+RESULTS-PENDING-ROUND-17
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the

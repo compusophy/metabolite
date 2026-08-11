@@ -17,7 +17,8 @@ fn main() {
             let ticks: u64 = flag(&args, "--ticks").and_then(|v| v.parse().ok()).unwrap_or(5000);
             let scholar_at = flag(&args, "--scholar").and_then(|v| v.parse().ok());
             let empiricist_at = flag(&args, "--empiricist").and_then(|v| v.parse().ok());
-            headless(seed, ticks, scholar_at, empiricist_at);
+            let eternal = args.iter().any(|a| a == "--eternal");
+            headless(seed, ticks, scholar_at, empiricist_at, eternal);
         }
         "card" => print!("{}", metabolite::physics_card()),
         _ => {
@@ -28,9 +29,12 @@ fn main() {
 }
 
 /// Headless: the world as one reproducible integer.
-fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>, empiricist_at: Option<u64>) {
-    let mut w = World::new(seed);
-    println!("metabolite · seed {seed} · {ticks} ticks");
+fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>, empiricist_at: Option<u64>, eternal: bool) {
+    let mut w = World::new_mode(seed, eternal);
+    println!(
+        "metabolite · seed {seed} · {ticks} ticks · oracles {}",
+        if eternal { "ETERNAL" } else { "ephemeral" }
+    );
     let report_every = (ticks / 10).max(1);
     let mut scholar_ids: Vec<usize> = Vec::new();
     let mut solves_seen = 0u64;
