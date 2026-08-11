@@ -90,6 +90,10 @@ pub fn state_json(w: &World, paused: bool, tps: u64) -> String {
                 n("peeks", w.counters.peeks),
                 n("extinctions", w.counters.extinctions),
                 n("warmth", w.counters.warmth),
+                n(
+                    "minds",
+                    w.agents.iter().filter(|a| a.alive && a.genome.contains("answer(")).count()
+                ),
                 format!("\"solves\":[{},{},{}]", w.counters.solves[0], w.counters.solves[1], w.counters.solves[2]),
             ])
         ),

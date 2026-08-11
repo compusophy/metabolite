@@ -490,6 +490,7 @@ const WROWS=[
   ['crashes',s=>s.counters.crashes],['bites',s=>s.counters.bites],
   ['gifts',s=>s.counters.gifts],['peeks',s=>s.counters.peeks],
   ['compost',s=>s.compost],['oracles',s=>(s.oracles||[]).length],
+  ['minds',s=>s.counters.minds],['warmth',s=>s.counters.warmth],
 ];
 $('#wsGrid').innerHTML=WROWS.map((r,i)=>
   `<div class="srow"><span>${r[0]}</span><b id="ws${i}">—</b></div>`).join('');

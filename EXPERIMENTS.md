@@ -405,6 +405,32 @@ constraint), then change what the world rewards (iteration 3: ephemeral
 problems) — and evolution finally chooses minds over instincts, and
 passes them on.
 
+## Round 10 — loop iteration 4: the first standing mind, and the silence of stable worlds
+
+Endurance runs (200K ticks — twice the deepest horizon ever) on the
+three flagship seeds, asking whether ephemeral physics lets a standing
+learner class form.
+
+**A first, by the thinnest margin**: seed 1618 ended with **1
+answer-gene carrier alive** — the first living carrier at any final
+census in this world's history (3,685 ever on that seed). The same run
+produced a gen-260 drifter cracking tier III for 5,000e at tick 159K and
+a gen-359 solve at tick 190K.
+
+**And a warning**: on the other two seeds, intelligence went silent —
+zero solves in the final 60–87K ticks. The mechanism is now clear: the
+empiricist lineage goes extinct in mature ecologies, fresh learners
+arrive only through regenesis, and regenesis fires only at total
+extinction. **Stable worlds starve themselves of minds.** The phoenix
+cycle that saved intelligence in young worlds is a bottleneck in old
+ones — catastrophe is currently this world's only teacher-training
+program. Learning-loop descent still stalls shallow (deepest gen 3;
+the Baldwin solve remains the only inherited-learner solve).
+
+The iteration's ledger: the learner class CAN stand (observed once);
+what it lacks is a renewal channel that doesn't require the end of the
+world. That is the next frontier the loop inherits.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the
