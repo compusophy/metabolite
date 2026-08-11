@@ -280,6 +280,54 @@ single-token change. The arms race has eight rooms to hide in; whether
 evolution finds cryptic cognition is the next thing the world gets to
 answer.
 
+## Round 7 — the hourly surveys, iteration 1: the lottery-ticket economy
+
+First fully autonomous loop iteration: four prospectors swept eight fresh
+seeds at 150K ticks while a forensics auditor dumped and analyzed every
+answer-gene carrier (5,578 records) from two 100K-tick reference worlds.
+
+**The survey: native intelligence is universal now.** Solves on 8/8
+never-before-run seeds — 50 tier-I, 20 tier-II, 3 tier-III across the
+sweep, including a purely evolved tier-III solve (seed 577, grazer
+lineage, gen 6: `(52x + 52) % 507`). De-novo answer genes arose
+independently on at least six seeds (three separate times on seed 2027;
+a two-ticket genome on 1013; a gen-257 solver on 1381). Specimen of the
+sweep: seed 3163's gen-153 drifter solved tier II with
+`answer(0, 0, (puzzle(0,1) * 2 + 6) % 489)` — it reads the NEIGHBOR
+cell's puzzle (usually -1), making its answer a constant. A wrong theory,
+profitably held. Also observed: the **phoenix cycle** (crash → regenesis
+→ fresh gen-0 empiricists resume solving — the germline is intelligence's
+disaster recovery), a 441,974e fortune built in one 6,000-tick lifetime,
+and vestigial mutation scars (`light(-16,0)`, clamped and unexpressed —
+junk DNA).
+
+**The audit: no deception — and the reason rewrites round 6.** Across
+5,578 carriers and 200K ticks: 96-97% are **lottery tickets** — bare
+hard-coded `(a*x+b)%m` genes riding farming torsos (418-629 distinct
+formula families per world; top family cloned 367 times). Only 69
+carriers hold the intact learning loop, 66 of them gen-0 reseeds; the
+learning haplotype has left 3 descendants ever (one of which, #52524,
+became the first descendant learner to solve — its inheritance
+byte-faithful). Every learning line in both worlds is **byte-identical
+to genesis** (the full 18-digit slot signature conserved, 69/69); every
+answer feed reads slot 4 (69/69); every peek reads slot 5 (59/59).
+
+Round 6 called deception "one digit-jitter away." **Wrong — the audit
+found the valley**: because the LINE is the gene, the writer
+`store(5, load(4))` and the hill-climb reader sit on the same line — a
+lone digit flip yields a learner that stores its discovery in one room
+and searches a stale room, strictly worse than honest AND worse than
+bare. Hidden-but-intact cognition requires two coordinated mutations,
+and selection cannot cross that valley through broken intermediates.
+**The genome representation itself forbids cryptic drift.** Deeper
+still: crossover-transferred thief genes are POISON — chimeras inherit
+the snipe gene without its `let t` declaration line and crash E-UNDEF
+every tick, forfeiting their tanks (0 hybrid solves ever).
+Representation determines evolvability; the line-as-gene convention
+that makes mutation safe also makes multi-line strategies nearly
+non-heritable. That is the next wall, and it is a wall in the genetics,
+not the economics.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the
