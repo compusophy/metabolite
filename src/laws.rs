@@ -156,6 +156,12 @@ pub const COMPOST_CAP: usize = 256;
 /// dead learner's genes within a few hundred ticks — the amber is why the
 /// death of the last mind is no longer the death of the idea.
 pub const AMBER_CAP: usize = 64;
+/// Stratified amber: half the ring is reserved for COGNITIVE entries —
+/// genes that both answer and remember (contain `answer(` and `store(`).
+/// Without the reserve, the amber saturates with short lottery-ticket
+/// formula lines (every dying ticket-carrier contributes one) and the
+/// rare learning loops get flushed; a formula can never evict a mind.
+pub const AMBER_MIND_RESERVE: usize = 32;
 
 /// Event feed ring size (observatory).
 pub const EVENTS_CAP: usize = 200;

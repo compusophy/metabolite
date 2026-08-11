@@ -612,13 +612,31 @@ impl World {
             }
             compost.push_back(entry);
         };
-        let mut amber = |amber_ring: &mut std::collections::VecDeque<String>, entry: &String| {
-            if entry.contains("answer(") {
-                if amber_ring.len() == AMBER_CAP {
-                    amber_ring.pop_front();
-                }
-                amber_ring.push_back(entry.clone());
+        let mut amber = |ring: &mut std::collections::VecDeque<String>, entry: &String| {
+            if !entry.contains("answer(") {
+                return;
             }
+            let is_mind = |e: &String| e.contains("store(");
+            if ring.len() == AMBER_CAP {
+                // Each class holds a soft quota of AMBER_MIND_RESERVE
+                // slots. Evict the oldest entry of whichever class is over
+                // quota — or, at exact equilibrium, of the newcomer's own
+                // class. A formula can never push minds below the reserve.
+                let minds = ring.iter().filter(|e| is_mind(e)).count();
+                let evict_mind = if AMBER_CAP - minds > AMBER_MIND_RESERVE {
+                    false // formulas over quota
+                } else if minds > AMBER_CAP - AMBER_MIND_RESERVE {
+                    true // minds over quota
+                } else {
+                    is_mind(entry)
+                };
+                if let Some(target) = ring.iter().position(|e| is_mind(e) == evict_mind) {
+                    ring.remove(target);
+                } else {
+                    ring.pop_front();
+                }
+            }
+            ring.push_back(entry.clone());
         };
         for line in &lines {
             amber(&mut self.amber, line);

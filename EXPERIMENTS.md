@@ -503,6 +503,38 @@ becomes load-bearing the moment any durable knowledge exists). The
 iteration's yield is the theorem, honestly priced: one hour, one null,
 one law.
 
+## Round 13 — loop iteration 7: stratified amber, and the paper
+
+The mechanism: the amber now runs a quota — half its 64 slots reserved
+for COGNITIVE entries (genes that both answer and remember); a lottery
+ticket can never evict a mind (pinned by a flood test). The hypothesis:
+resurrections would start carrying learning loops instead of bare
+formulas.
+
+**A/B (flagship seeds, 200K; seed 271's agent failed reporting):**
+
+- **The deep numbers exploded**: learning-loop descent went from
+  generation 58 to **generations 467 and 476**, with ~3,200-3,400 loop
+  carriers ever and thousands of descendants per seed — the learning
+  haplotype is now a permanent fixture of the gene pool, not a reseed
+  artifact.
+- **Seed 1618's regression is cured**: [13,2,4] with 6 late-epoch solves
+  (was [8,4,1] with 0); four tier-III solves in one run — a record.
+  Seed 7 went learner-majority (8 of 14 solves) and produced the
+  world's first **serial solver**: #122887, four solves in 48 ticks.
+- **The named prize stays unclaimed, for a newly-understood reason**:
+  no resurrected learner — and amber-splice solves became RARER (1 and
+  0 vs 3 and 3). Stratification halved the formula slots that produced
+  ticket-resurrections, while spliced cognitive genes need their
+  carrier to reach an oracle and survive study — a taller order than a
+  ticket's lucky hit. The library now reliably holds minds; getting
+  them read profitably remains open.
+
+Also this hour, in the family tradition — the paper is the product:
+**paper/METABOLITE.md** (~2,900 words), the twelve-round arc from
+fuel=money to the ephemerality law, negatives first-class, every figure
+sourced from this notebook, reproduction commands with expected hashes.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the

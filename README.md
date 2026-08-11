@@ -46,7 +46,8 @@ host — `vercel.json` is set up so importing this repo into Vercel just
 works (output directory `dist`, no build step). One physics: browsers
 throttle background tabs, so the in-page world runs only while watched.
 The experiments live in [EXPERIMENTS.md](EXPERIMENTS.md) — including the
-first native solve (seed 44, tick 43,141, organism #35245).
+first native solve (seed 44, tick 43,141, organism #35245) — and the
+paper distilling them is [paper/METABOLITE.md](paper/METABOLITE.md).
 
 ## The world
 

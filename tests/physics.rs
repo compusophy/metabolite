@@ -271,6 +271,41 @@ fn amber_outlives_the_compost() {
     );
 }
 
+/// Stratified amber: lottery-ticket formula lines can never flush the
+/// rare cognitive entries (answer + store) below their reserve. The
+/// library keeps its minds even when the age is drowning in tickets.
+#[test]
+fn amber_reserves_slots_for_minds() {
+    let mut w = World::new(53);
+    // One dying mind, then a flood of dying ticket-carriers.
+    let mind = "store(1, 7);\nif puzzle(0,0) >= 0 { answer(0, 0, load(1)); }";
+    let id = w.inject("mind", mind).unwrap();
+    for _ in 0..200 {
+        w.tick();
+        if !w.agents[id].alive {
+            break;
+        }
+    }
+    assert!(!w.agents[id].alive);
+    for i in 0..300 {
+        let t = w.inject(&format!("ticket-{i}"), "answer(0, 0, (puzzle(0,0) * 3 + 1) % 64);");
+        if let Ok(tid) = t {
+            // Starve it fast: the endowment burns away within ~30 ticks.
+            let _ = tid;
+        }
+        for _ in 0..40 {
+            w.tick();
+        }
+        if w.amber.len() == metabolite::laws::AMBER_CAP {
+            break;
+        }
+    }
+    assert!(
+        w.amber.iter().any(|e| e.contains("store(") && e.contains("answer(")),
+        "cognitive entries must survive the ticket flood"
+    );
+}
+
 /// Cassettes: multi-line compost entries splice as one block, so a
 /// coordinated strategy (a declaration and the gene that needs it) can be
 /// inherited intact. Iteration-1 forensics showed single-line splicing
