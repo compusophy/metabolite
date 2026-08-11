@@ -1,5 +1,9 @@
 # metabolite
 
+**Live: [metabolite-iota.vercel.app](https://metabolite-iota.vercel.app)** —
+the whole world runs in your tab (wasm, no server; `?seed=N` picks the
+universe; browsers throttle background tabs, so it runs while watched).
+
 **A sealed ecology where fuel is money.** Every organism's mind is a
 program in **wit** — this repo's own total language: provably halting,
 provably confined to eighteen capabilities — and its fuel tank each tick *is*
