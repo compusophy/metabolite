@@ -237,6 +237,49 @@ a bloodline. The lineage's own founding law ("code dies; knowledge
 survives") reproduced itself as an empirical result inside its own
 descendant: the family name is lost; the knowledge is immortal.
 
+## Round 6 — the knowledge economy: memes, theft, and bistable markets
+
+Round 5 proved intelligence circulates through genes. But a third
+transmission channel had never carried a single erg: `peek()` — paid
+memory-reading. A converged empiricist holds the oracle's answer in its
+memory slot 5, in the open, purchasable for 4e — and `answer()` works
+from adjacent cells.
+
+**The plagiarist** (`genesis::PLAGIARIST`) is the first organism to buy
+knowledge: it finds an oracle occupied by a studying teacher, pays
+tuition to read the teacher's working memory, and submits the teacher's
+own best guess from the next seat over. It does not study. Its education
+is someone else's.
+
+**The staged classroom** (one teacher, one thief, tier III) produced the
+round's sharpest result — the heist works *too* well. As the teacher
+converges, the thief's snipes pay more (each submits the teacher's
+ever-improving guess): income 85 → 2,507e while the escrow bled 5,000 →
+21. **Nobody ever took the pot.** The prize was strip-mined to nothing
+through the open window of the teacher's mind — the tragedy of the
+knowledge commons, in the first classroom this world ever had. Pinned by
+`the_plagiarist_profits_from_a_teachers_study`.
+
+**At civilization scale** (plagiarists in the germline, 100K ticks), the
+same physics produced OPPOSITE regimes on different seeds — the
+knowledge economy is bistable:
+
+- Seed 7: the tragedy dominates. One early solve, then intellectual
+  silence; scroungers suppress study.
+- Seed 1618: thieves TURBOCHARGED the market — the best intelligence
+  curve ever recorded: [6, 3, 0] with a late-run golden age (3 tier-I +
+  2 tier-II solves in the single epoch 65-70K), record warmth of
+  26,095e, solving sustained to the end of history. More minds attempt
+  answers, tuition circulates, and crossover hybridizes thief and
+  studier genes into producer-scrounger mosaics.
+
+Open, and one digit-jitter away: **deception**. Thieves read slot 5 by
+convention; a studier that stores its working memory in another slot is
+invisible to them, and `store(5, ...)` mutating to `store(2, ...)` is a
+single-token change. The arms race has eight rooms to hide in; whether
+evolution finds cryptic cognition is the next thing the world gets to
+answer.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the

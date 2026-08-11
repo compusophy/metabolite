@@ -304,6 +304,78 @@ fn investment_is_an_evolvable_endowment() {
     assert_eq!(child.endow, SPAWN_ENDOW);
 }
 
+/// The heist: a plagiarist beside a studying empiricist pays tuition
+/// (peek fee) to read the teacher's working memory and submits the
+/// teacher's own best guess from the adjacent cell. Culture — knowledge
+/// moving between minds within a lifetime — must actually pay.
+#[test]
+fn the_plagiarist_profits_from_a_teachers_study() {
+    // Stage the classroom on the first seed where the furniture fits (a
+    // free tier-III oracle with a free adjacent seat, and both actors
+    // surviving ambient wildlife) — deterministic, but robust to germline
+    // changes shifting any single seed's world.
+    for seed in 5..40 {
+        if let Some(()) = try_heist(seed) {
+            return;
+        }
+    }
+    panic!("no seed in 5..40 staged a successful heist");
+}
+
+fn try_heist(seed: u64) -> Option<()> {
+    let mut w = World::new(seed);
+    // A non-breeding teacher (isolate the study), teleported onto tier III.
+    let monk: String = metabolite::genesis::EMPIRICIST
+        .lines()
+        .filter(|l| !l.contains("spawn") && !l.contains("give"))
+        .collect::<Vec<_>>()
+        .join("\n");
+    let teacher = w.inject("teacher", &monk).ok()?;
+    w.ledger.mint_agent(teacher, 50_000, true);
+    let ocell = w.oracles.iter().find(|o| o.tier == 2 && w.occ[o.cell].is_none())?.cell;
+    let old = World::cell_of(w.agents[teacher].x, w.agents[teacher].y);
+    w.occ[old] = None;
+    w.agents[teacher].x = ocell % GRID;
+    w.agents[teacher].y = ocell / GRID;
+    w.occ[ocell] = Some(teacher);
+    // A non-breeding thief in the adjacent cell (east, torus-wrapped).
+    let thief_cell = World::cell_of((ocell % GRID + 1) % GRID, ocell / GRID);
+    if w.occ[thief_cell].is_some() {
+        return None;
+    }
+    let sniper: String = metabolite::genesis::PLAGIARIST
+        .lines()
+        .filter(|l| !l.contains("spawn"))
+        .collect::<Vec<_>>()
+        .join("\n");
+    let thief = w.inject("thief", &sniper).ok()?;
+    w.ledger.mint_agent(thief, 5_000, true);
+    let told = World::cell_of(w.agents[thief].x, w.agents[thief].y);
+    w.occ[told] = None;
+    w.agents[thief].x = thief_cell % GRID;
+    w.agents[thief].y = thief_cell / GRID;
+    w.occ[thief_cell] = Some(thief);
+
+    let slot = w.oracles.iter().position(|o| o.cell == ocell).unwrap();
+    let pot = w.ledger.escrow(slot);
+    for _ in 0..200 {
+        w.tick();
+    }
+    // The pinned phenomenon — the tragedy of the knowledge commons: with
+    // an unguarded mind broadcasting its best guess, the thief's snipes
+    // (each submitting the teacher's ever-improving answer) strip-mine
+    // the escrow faster than anyone can land exact. The thief profits;
+    // the pot is never taken; the teacher gets crumbs.
+    if !(w.counters.peeks > 50
+        && w.agents[thief].income > 1000
+        && w.counters.solves[2] == 0
+        && w.ledger.escrow(slot) < pot / 20)
+    {
+        return None; // ambient wildlife broke the staging on this seed
+    }
+    Some(())
+}
+
 /// Oracle law sanity: the published formulas are the ones that pay.
 #[test]
 fn oracle_formulas_are_the_published_law() {

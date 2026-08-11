@@ -56,6 +56,11 @@ pub const SEED_POP: &[(&str, &str, usize)] = &[
     // thresholds tuned by mutation, its genes mixed by crossover. Rounds
     // 4-5 hand-built the strategy; selection owns the constants now.
     ("empiricist", EMPIRICIST, 6),
+    // And its parasite. Producers and scroungers, coevolving: thieves
+    // read minds through peek(_, _, 5); a single digit mutation lets a
+    // studier hide its working memory in another slot. Deception is one
+    // jitter away, and the arms race has eight rooms to hide in.
+    ("plagiarist", PLAGIARIST, 5),
 ];
 
 /// A ready-to-inject organism for the README and the observatory's Inject
@@ -75,6 +80,26 @@ if x >= 0 { let w = answer(0, 0, load(4)); store(6, load(6) + 1); if w > load(1)
 harvest();\n\
 invest(1600);\n\
 if energy() > 2100 { spawn(); }";
+
+/// The plagiarist: the first organism to buy knowledge. It does not
+/// study — it finds an oracle occupied by a studying teacher, pays the
+/// peek fee to read the teacher's working memory (slot 5, the best guess
+/// so far), and submits that guess from the adjacent cell. When the
+/// teacher's study converges, the plagiarist wins the race to the pot:
+/// the teacher probes AROUND its best guess; the thief submits the best
+/// guess ITSELF. Tuition: 4e. Education: someone else's.
+pub const PLAGIARIST: &str = "\
+if puzzle(0,0) >= 0 { step(roll(3) - 1, roll(3) - 1); }\n\
+let t = 0; let tx = 0; let ty = 0;\n\
+if puzzle(1,0) >= 0 && occupied(1,0) == 1 { t = 1; tx = 1; }\n\
+if t == 0 && puzzle(-1,0) >= 0 && occupied(-1,0) == 1 { t = 1; tx = -1; }\n\
+if t == 0 && puzzle(0,1) >= 0 && occupied(0,1) == 1 { t = 1; ty = 1; }\n\
+if t == 0 && puzzle(0,-1) >= 0 && occupied(0,-1) == 1 { t = 1; ty = -1; }\n\
+if t == 1 { let g = peek(tx, ty, 5); if g > 0 { answer(tx, ty, g); } }\n\
+if t == 0 { let s = scent(0,0); let sx = 0; let sy = 0; if scent(1,0) > s { s = scent(1,0); sx = 1; sy = 0; } if scent(-1,0) > s { s = scent(-1,0); sx = -1; sy = 0; } if scent(0,1) > s { s = scent(0,1); sx = 0; sy = 1; } if scent(0,-1) > s { s = scent(0,-1); sx = 0; sy = -1; } if sx == 0 && sy == 0 && light(2,2) > light(0,0) + 20 { sx = 1; sy = 1; } if sx != 0 || sy != 0 { step(sx, sy); } }\n\
+harvest();\n\
+invest(400);\n\
+if energy() > 900 { spawn(); }";
 
 pub const SCHOLAR: &str = "\
 invest(700);\n\
