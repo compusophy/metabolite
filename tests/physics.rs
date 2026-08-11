@@ -220,6 +220,35 @@ fn every_filled_codon_is_viable() {
     }
 }
 
+/// Cassettes: multi-line compost entries splice as one block, so a
+/// coordinated strategy (a declaration and the gene that needs it) can be
+/// inherited intact. Iteration-1 forensics showed single-line splicing
+/// delivers only poison (a snipe without its `let t` crashes forever).
+#[test]
+fn compost_cassettes_keep_coordinated_genes_together() {
+    let mut rng = metabolite::rng::Rng::new(99);
+    let mut compost = std::collections::VecDeque::new();
+    let decl = "let t = 0; let tx = 0; let ty = 0;";
+    let snipe = "if t == 1 { let g = peek(tx, ty, 5); if g > 0 { answer(tx, ty, g); } }";
+    compost.push_back(format!("{decl}\n{snipe}"));
+    let host = "harvest();\nspawn();";
+    let mut intact = 0;
+    let mut torn_viable = 0;
+    for _ in 0..2000 {
+        let (child, _) = genome::mutate(host, &mut rng, &compost);
+        if child.contains("peek(") {
+            if child.contains("let t = 0") {
+                intact += 1;
+                assert!(genome::viable(&child).is_ok(), "an intact cassette must parse: {child}");
+            } else {
+                torn_viable += 1;
+            }
+        }
+    }
+    assert!(intact > 20, "cassette splices must occur (got {intact})");
+    assert_eq!(torn_viable, 0, "a cassette must never arrive torn");
+}
+
 /// Sex obeys the same gate: hammer crossover across all genesis pairs —
 /// children either parse or miscarry; the operation itself never panics,
 /// and line-structured parents mostly yield viable children.

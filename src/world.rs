@@ -578,14 +578,33 @@ impl World {
             self.counters.starved += 1;
         }
         let age = self.tick - self.agents[me].born;
-        // The genome returns to the compost, line by line, for later splicing.
-        for line in self.agents[me].genome.clone().lines() {
-            let t = line.trim();
-            if !t.is_empty() {
-                if self.compost.len() == COMPOST_CAP {
-                    self.compost.pop_front();
-                }
-                self.compost.push_back(t.to_string());
+        // The genome returns to the compost for later splicing: every line
+        // singly, plus up to two CASSETTES — consecutive-line blocks that
+        // travel as one splice. Iteration-1 forensics showed single-line
+        // splicing tears coordinated strategies apart (a snipe gene without
+        // its declaration line crashes E-UNDEF forever); cassettes are how
+        // multi-line inventions become heritable.
+        let lines: Vec<String> = self.agents[me]
+            .genome
+            .lines()
+            .map(|l| l.trim().to_string())
+            .filter(|l| !l.is_empty())
+            .collect();
+        let mut push = |compost: &mut std::collections::VecDeque<String>, entry: String| {
+            if compost.len() == COMPOST_CAP {
+                compost.pop_front();
+            }
+            compost.push_back(entry);
+        };
+        for line in &lines {
+            push(&mut self.compost, line.clone());
+        }
+        if lines.len() >= 2 {
+            for _ in 0..2 {
+                let len = 2 + self.rng.below(2) as usize; // 2 or 3 lines
+                let start = self.rng.below((lines.len() + 1 - len.min(lines.len())) as u64) as usize;
+                let end = (start + len).min(lines.len());
+                push(&mut self.compost, lines[start..end].join("\n"));
             }
         }
         let a = &mut self.agents[me];

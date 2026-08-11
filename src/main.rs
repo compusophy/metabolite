@@ -99,6 +99,27 @@ fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>, empiricist_at: Optio
     let carriers_ever = w.agents.iter().filter(|a| a.genome.contains("answer(")).count();
     println!("\navg generation of the living: {avg_gen}");
     println!("answer-gene carriers: {carriers} alive / {carriers_ever} ever");
+    // Multi-line heritability metrics (iteration-2 question): does the
+    // canonical learning loop propagate beyond gen 0, and do snipe genes
+    // travel with their declaration line or arrive torn (E-UNDEF poison)?
+    let loops_ever = w.agents.iter().filter(|a| a.genome.contains("store(5, load(4))")).count();
+    let loop_descendants =
+        w.agents.iter().filter(|a| a.genome.contains("store(5, load(4))") && a.generation > 0);
+    let (mut desc_n, mut desc_maxgen) = (0u32, 0u32);
+    for a in loop_descendants {
+        desc_n += 1;
+        desc_maxgen = desc_maxgen.max(a.generation);
+    }
+    let snipe_intact = w
+        .agents
+        .iter()
+        .filter(|a| a.genome.contains("peek(") && a.genome.contains("let t = 0"))
+        .count();
+    let snipe_torn =
+        w.agents.iter().filter(|a| a.genome.contains("peek(") && !a.genome.contains("let t = 0")).count();
+    println!(
+        "learning loops: {loops_ever} ever · {desc_n} descendants (deepest gen {desc_maxgen}) · snipe genes: {snipe_intact} intact / {snipe_torn} torn"
+    );
     let census: Vec<String> = metabolite::genesis::SEED_POP
         .iter()
         .enumerate()

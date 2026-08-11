@@ -122,10 +122,21 @@ pub fn mutate(src: &str, rng: &mut Rng, compost: &VecDeque<String>) -> (String, 
             desc = "no-op".to_string();
         }
     } else if roll < 62 {
+        // Duplicate a line — or, a third of the time, a whole block:
+        // gene-cassette duplication is how multi-line strategies amplify.
         let li = rng.below(lines.len() as u64) as usize;
-        let l = lines[li].clone();
-        lines.insert(li, l);
-        desc = format!("duplicated line {}", li + 1);
+        if rng.below(3) == 0 && li + 1 < lines.len() {
+            let end = (li + 2 + rng.below(2) as usize).min(lines.len());
+            let block: Vec<String> = lines[li..end].to_vec();
+            for (k, l) in block.into_iter().enumerate() {
+                lines.insert(li + k, l);
+            }
+            desc = format!("duplicated lines {}-{}", li + 1, end);
+        } else {
+            let l = lines[li].clone();
+            lines.insert(li, l);
+            desc = format!("duplicated line {}", li + 1);
+        }
     } else if roll < 74 {
         if lines.len() > 1 {
             let li = rng.below(lines.len() as u64) as usize;

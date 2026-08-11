@@ -328,6 +328,45 @@ that makes mutation safe also makes multi-line strategies nearly
 non-heritable. That is the next wall, and it is a wall in the genetics,
 not the economics.
 
+## Round 8 — loop iteration 2: cassette genetics, and why instinct beats learning
+
+Iteration 1 located the wall in the genetics: multi-line strategies were
+non-heritable (splices tore declarations from the genes that needed
+them). Iteration 2 built **cassette genetics**: dying organisms compost
+2-3-line consecutive blocks that splice as one unit; gene duplication
+can copy whole blocks; and the census now reports heritability directly.
+A pinned test proves a cassette never arrives torn (2,000 trials).
+
+**Transmission: cured.** Across six 100K-tick validation seeds, snipe
+genes now arrive **140 intact vs 4 torn** — under the old genetics,
+essentially every transfer was poison. Learning-loop descendants: 11
+(deepest gen 2), up from 3 in twice the tick-volume.
+
+**Adoption: refused — and the refusal is the discovery.** Zero
+descendant learners solved anything, on any seed. Every learning-loop
+solve in ~600K cumulative ticks was a gen-0 genesis reseed. Meanwhile
+evolved HARD-CODED solvers flourished at depth: gen-326, gen-215 (a
+formula with an evolved negative term, `(31x - 37) % 170`), gen-122,
+gen-92 (paired `%447`/`%223` formula lines from one comparison flip),
+gen-23 (took 5,000e from oracle III with a grown codon). Evolution,
+offered heritable learning, keeps choosing lottery tickets.
+
+It is right to. The oracle formulas are **eternal constants of this
+world** — the same three functions, forever, on every seed. When the
+environment never changes within a lifetime, evolutionary theory says
+instinct beats plasticity: write the knowledge into the genome, not the
+brain. The formula IS the memory, and DNA is the only RAM that
+inherits. The learner pays ~60/tick for knowledge that evaporates when
+its oracle moves; the instinct-carrier pays ~25/tick for knowledge that
+its children get for free. **In a fixed world, the genome is a better
+memory than memory.**
+
+Which hands iteration 3 its mission: make the world's problems
+ephemeral. Give each oracle instance its own secret parameters, and no
+genome-inscribed formula can ever solve twice — within-lifetime
+learning becomes the only strategy that pays, and the Baldwin
+conditions for intelligence finally hold.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the
