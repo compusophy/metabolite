@@ -67,25 +67,16 @@ pub struct World {
     pub compost: VecDeque<String>,
     /// The compost's protected stratum: oracle-touching genes only.
     pub amber: VecDeque<String>,
+    /// The sun's position and velocity in millicells (wandering star:
+    /// momentum + deterministic random steering — weather, not clockwork).
+    sun_mx: i64,
+    sun_my: i64,
+    sun_vx: i64,
+    sun_vy: i64,
     pub feed: Feed,
     pub counters: Counters,
     pub history: VecDeque<(u64, u32, u64, u64)>,
     pub world_hash: u64,
-}
-
-/// sin(2*pi*k/64) * 1000, k = 0..63. Integer trig, the family way.
-const SIN64: [i64; 64] = [
-    0, 98, 195, 290, 383, 471, 556, 634, 707, 773, 831, 882, 924, 957, 981, 995, 1000, 995, 981,
-    957, 924, 882, 831, 773, 707, 634, 556, 471, 383, 290, 195, 98, 0, -98, -195, -290, -383,
-    -471, -556, -634, -707, -773, -831, -882, -924, -957, -981, -995, -1000, -995, -981, -957,
-    -924, -882, -831, -773, -707, -634, -556, -471, -383, -290, -195, -98,
-];
-
-fn sin64(k: u64) -> i64 {
-    SIN64[(k % 64) as usize]
-}
-fn cos64(k: u64) -> i64 {
-    SIN64[((k + 16) % 64) as usize]
 }
 
 impl World {
@@ -107,6 +98,10 @@ impl World {
             oracles: Vec::new(),
             compost: VecDeque::new(),
             amber: VecDeque::new(),
+            sun_mx: (GRID as i64 / 2) * 1000,
+            sun_my: (GRID as i64 / 2) * 1000,
+            sun_vx: 90,
+            sun_vy: -60,
             feed: Feed::new(EVENTS_CAP),
             counters: Counters::default(),
             history: VecDeque::new(),
@@ -480,14 +475,29 @@ impl World {
     // ---- the tick ----
 
     pub fn sun_pos(&self) -> (i64, i64) {
-        let k = self.tick * 64 / SUN_PERIOD;
-        let c = GRID as i64 / 2;
-        let orbit = GRID as i64 / 2 - 6;
-        // Lissajous 1:2 — the sun figure-eights across the torus.
-        (c + orbit * cos64(k) / 1000, c + orbit * sin64(k * 2) / 1000)
+        (self.sun_mx.div_euclid(1000), self.sun_my.div_euclid(1000))
+    }
+
+    /// Weather, not clockwork: the sun drifts with momentum and small
+    /// deterministic random steering, its speed held in a band. Life must
+    /// track a star that never repeats its path.
+    fn drift_sun(&mut self) {
+        self.sun_vx += self.rng.range(-13, 13);
+        self.sun_vy += self.rng.range(-13, 13);
+        self.sun_vx = self.sun_vx.clamp(-170, 170);
+        self.sun_vy = self.sun_vy.clamp(-170, 170);
+        // Never stall: a becalmed sun re-kicks.
+        if self.sun_vx.abs() + self.sun_vy.abs() < 60 {
+            self.sun_vx += if self.sun_vx >= 0 { 40 } else { -40 };
+            self.sun_vy += if self.sun_vy >= 0 { 30 } else { -30 };
+        }
+        let m = GRID as i64 * 1000;
+        self.sun_mx = (self.sun_mx + self.sun_vx).rem_euclid(m);
+        self.sun_my = (self.sun_my + self.sun_vy).rem_euclid(m);
     }
 
     fn shine(&mut self) {
+        self.drift_sun();
         let (cx, cy) = self.sun_pos();
         let r2 = SUN_RADIUS * SUN_RADIUS;
         let mut weights: Vec<(usize, i64)> = Vec::new();

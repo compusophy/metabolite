@@ -224,7 +224,12 @@ const TIER=['#3fd9f0','#f06ad8','#f2ede2'];
 async function poll(){
   try{
     const r=await fetch('/state');
-    S=await r.json();
+    const next=await r.json();
+    // Motion interpolation: remember where each agent was last state.
+    prevPos=curPos;curPos={};
+    for(const a of next.agents)curPos[a.id]=[a.x,a.y];
+    prevT=curT;curT=performance.now();
+    S=next;
     setOnline(true);
     updateFeed();          // must run before diffFlashes (both key off lastEvTop)
     diffFlashes();
@@ -370,9 +375,18 @@ function draw(){
     ctx.globalAlpha=1;ctx.lineWidth=2;
     ctx.beginPath();ctx.arc(px,py,cs*.58,-Math.PI/2,-Math.PI/2+(o.ttl/oMax[k])*2*Math.PI);ctx.stroke();
   }
-  // agents
+  // agents (torus-aware interpolation between the last two states)
+  const span=Math.max(40,curT-prevT),alpha=Math.min(1,(performance.now()-curT)/span);
   for(const a of S.agents){
-    const px=(a.x+.5)*cs,py=(a.y+.5)*cs;
+    let ix=a.x,iy=a.y;
+    const pp=prevPos[a.id];
+    if(pp){
+      let dx=a.x-pp[0],dy=a.y-pp[1];
+      if(dx>grid/2)dx-=grid;if(dx<-grid/2)dx+=grid;
+      if(dy>grid/2)dy-=grid;if(dy<-grid/2)dy+=grid;
+      ix=pp[0]+dx*alpha;iy=pp[1]+dy*alpha;
+    }
+    const px=(((ix%grid)+grid)%grid+.5)*cs,py=(((iy%grid)+grid)%grid+.5)*cs;
     const r=Math.max(2,Math.min(5,Math.sqrt(Math.max(a.e,0))*.22));
     ctx.fillStyle=`hsl(${(a.lin*137.508)%360} 70% 60%)`;
     ctx.beginPath();ctx.arc(px,py,r,0,7);ctx.fill();
@@ -582,7 +596,8 @@ $('#copyBtn').onclick=async()=>{
 };
 // ---------- go ----------
 loadPhys();
-setInterval(poll,250);
+let prevPos={},curPos={},prevT=0,curT=0;
+setInterval(poll,100);
 poll();
 requestAnimationFrame(draw);
 window.addEventListener('resize',sizeCanvas);

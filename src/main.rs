@@ -21,6 +21,44 @@ fn main() {
             headless(seed, ticks, scholar_at, empiricist_at, eternal);
         }
         "card" => print!("{}", metabolite::physics_card()),
+        // The training-corpus exporter: every life as one JSONL record —
+        // genome in, economic outcome out. The dataset a model that
+        // writes organisms trains against (fitness is ground truth; no
+        // judge anywhere).
+        "corpus" => {
+            let ticks: u64 = flag(&args, "--ticks").and_then(|v| v.parse().ok()).unwrap_or(50000);
+            let mut w = World::new(seed);
+            for _ in 0..ticks {
+                w.tick();
+            }
+            use metabolite::json::{n, obj, s};
+            for a in &w.agents {
+                let lifespan = a.died.unwrap_or(w.tick).saturating_sub(a.born);
+                println!(
+                    "{}",
+                    obj(vec![
+                        n("seed", seed),
+                        n("id", a.id),
+                        s("genome", &a.genome),
+                        s(
+                            "kind",
+                            metabolite::genesis::SEED_POP
+                                .get(a.lineage)
+                                .map(|k| k.0)
+                                .unwrap_or("injected")
+                        ),
+                        n("generation", a.generation),
+                        n("born", a.born),
+                        n("lifespan", lifespan),
+                        n("alive_at_end", a.alive),
+                        n("income", a.income),
+                        n("spent", a.spent),
+                        n("solved", a.solved),
+                        n("kids", a.kids),
+                    ])
+                );
+            }
+        }
         _ => {
             let port = flag(&args, "--port").and_then(|v| v.parse().ok()).unwrap_or(laws::PORT);
             observatory(seed, port);

@@ -70,8 +70,9 @@ pub fn physics_card() -> String {
          CAPABILITIES (the complete effect surface — nothing else exists):\n\
          {caps}\
          \n\
-         WORLD. {GRID}x{GRID} torus. A sun drifts in a figure-eight ({SUN_PERIOD}-tick\n\
-         orbit) minting ~{SUN_INFLUX}e/tick of light into cells (cap {CELL_CAP}e/cell), plus\n\
+         WORLD. {GRID}x{GRID} torus. A sun WANDERS it — momentum plus deterministic\n\
+         random steering, a path that never repeats — minting ~{SUN_INFLUX}e/tick\n\
+         of light into cells (cap {CELL_CAP}e/cell), plus\n\
          drizzle. Harvest moves cell ergs to you. Movement: one cell per step,\n\
          blocked by occupants. Senses clamp to radius {SENSE_RADIUS}; interactions\n\
          (bite/give/peek/answer) reach adjacent cells only (radius 1).\n\

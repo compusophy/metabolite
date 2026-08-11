@@ -26,8 +26,6 @@ pub const GENOME_CAP: usize = 2048;
 pub const SUN_INFLUX: u64 = 2800;
 /// Radius of the drifting sun spot, in cells.
 pub const SUN_RADIUS: i64 = 7;
-/// Ticks for the sun to complete one orbit of the grid.
-pub const SUN_PERIOD: u64 = 1024;
 /// Random cells receiving DRIZZLE_ERG each tick (life far from the sun).
 pub const DRIZZLE_CELLS: u64 = 120;
 pub const DRIZZLE_ERG: u64 = 4;
