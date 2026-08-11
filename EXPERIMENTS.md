@@ -572,6 +572,38 @@ Fourteen rounds ago this world could not add. It now resurrects dead
 mathematicians into farmers' bodies, and they solve quadratics for
 money.
 
+## Round 15 — loop iteration 9: the Atlas
+
+Eight never-run seeds (5001-5008), 100K ticks each, under the final
+physics — what an *ordinary* universe now produces:
+
+| seed | solves I/II/III | learner:instinct | resurrected learners | deep learners | minds at census |
+|---|---|---|---|---|---|
+| 5001 | 5/1/1 | 3:4 | 0 | 1 | 0 |
+| 5002 | 8/4/1 | 9:4 | **6** | 7 | 3 |
+| 5003 | 7/4/2 | 7:6 | **6** | 6 | **32** |
+| 5004 | 7/1/0 | 5:3 | 4 | 5 | 0 |
+| 5005 | 5/5/0 | 3:7 | 0 | 0 | 0 |
+| 5006 | 3/1/1 | 2:3 | 1 | 1 | 1 |
+| 5007 | 4/0/1 | 1:4 | 1 | 1 | 0 |
+| 5008 | 2/1/0 | 2:1 | 1 | 1 | 1 |
+
+Reading the table: solves on 8/8 seeds (41/17/6 by tier — six tier-III
+cracks in fresh universes); **19 resurrected-learner solves** across the
+sweep — two iterations ago that class had zero members ever, now it is
+routine, including one at generation 203; **22 deep learner solves** vs
+the single one that existed in all history before round 14; and seed
+5003 ended with **32 standing minds** — the first true scholar class,
+3.5x the previous record. Learner and instinct economies sit at parity
+(32:32) as the norm, with honest variance: 5004 front-loaded then went
+mind-extinct; 5005 stayed instinct-heavy; 5002 survived a crash to
+population ONE and came back learning-dominant.
+
+Also this hour: paper/METABOLITE.md revised through round 14 (4,054
+words) — abstract, results, the new composability law (law 10:
+composability converts lineage depth into cross-species spread), and
+the depth-vs-spread trade in Limitations.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the
