@@ -118,7 +118,9 @@ fn headless(seed: u64, ticks: u64, scholar_at: Option<u64>, empiricist_at: Optio
     let snipe_torn =
         w.agents.iter().filter(|a| a.genome.contains("peek(") && !a.genome.contains("let t = 0")).count();
     println!(
-        "learning loops: {loops_ever} ever · {desc_n} descendants (deepest gen {desc_maxgen}) · snipe genes: {snipe_intact} intact / {snipe_torn} torn"
+        "learning loops: {loops_ever} ever · {desc_n} descendants (deepest gen {desc_maxgen}) · snipe genes: {snipe_intact} intact / {snipe_torn} torn · amber {}/{}",
+        w.amber.len(),
+        metabolite::laws::AMBER_CAP
     );
     let census: Vec<String> = metabolite::genesis::SEED_POP
         .iter()

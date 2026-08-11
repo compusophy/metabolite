@@ -150,6 +150,12 @@ pub const ORACLE_A_CEIL: [u64; 3] = [8, 14, 6];
 
 /// Compost: dead genomes' lines, scavengeable by mutation (ring buffer).
 pub const COMPOST_CAP: usize = 256;
+/// Amber: the compost's protected stratum. Entries that touch the oracles
+/// (contain an answer gene) are also preserved here, and only newer amber
+/// displaces older amber. In a mature monoculture the compost flushes a
+/// dead learner's genes within a few hundred ticks — the amber is why the
+/// death of the last mind is no longer the death of the idea.
+pub const AMBER_CAP: usize = 64;
 
 /// Event feed ring size (observatory).
 pub const EVENTS_CAP: usize = 200;

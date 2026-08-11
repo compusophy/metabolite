@@ -79,8 +79,16 @@ const OP_SWAPS: &[(&str, &str)] = &[
 ];
 
 /// One mutation of `src`. Returns (child_source, description). The caller
-/// applies the grammar gate; this function only edits text.
-pub fn mutate(src: &str, rng: &mut Rng, compost: &VecDeque<String>) -> (String, String) {
+/// applies the grammar gate; this function only edits text. `amber` is
+/// the compost's protected stratum (oracle-touching genes): a quarter of
+/// splices draw from it, so a mature world can rediscover minds its
+/// compost has long forgotten.
+pub fn mutate(
+    src: &str,
+    rng: &mut Rng,
+    compost: &VecDeque<String>,
+    amber: &VecDeque<String>,
+) -> (String, String) {
     let mut lines: Vec<String> = src.lines().map(|l| l.to_string()).collect();
     if lines.is_empty() {
         lines.push("harvest();".to_string());
@@ -155,8 +163,13 @@ pub fn mutate(src: &str, rng: &mut Rng, compost: &VecDeque<String>) -> (String, 
             desc = "no-op".to_string();
         }
     } else {
-        // Insert: half fresh codon, half scavenged from the compost.
-        let line = if !compost.is_empty() && rng.below(2) == 0 {
+        // Insert: a quarter from the amber, else half compost, half codon.
+        let pick = rng.below(4);
+        let line = if pick == 0 && !amber.is_empty() {
+            let i = rng.below(amber.len() as u64) as usize;
+            desc = "spliced a gene from the amber".to_string();
+            amber[i].clone()
+        } else if !compost.is_empty() && rng.below(2) == 0 {
             let i = rng.below(compost.len() as u64) as usize;
             desc = "spliced a composted gene".to_string();
             compost[i].clone()

@@ -155,7 +155,7 @@ fn mutation_never_panics_and_miscarriage_rate_is_sane() {
     let mut src = SEED_POP[1].1.to_string(); // the grazer
     let mut viable = 0u32;
     for _ in 0..2000 {
-        let (child, _desc) = genome::mutate(&src, &mut rng, &compost);
+        let (child, _desc) = genome::mutate(&src, &mut rng, &compost, &Default::default());
         if genome::viable(&child).is_ok() {
             viable += 1;
             src = child; // walk the fitness landscape
@@ -224,6 +224,38 @@ fn every_filled_codon_is_viable() {
     }
 }
 
+/// Amber: oracle-touching genes survive in the compost's protected
+/// stratum after the ordinary ring has flushed them. The death of the
+/// last mind must never again be the death of the idea.
+#[test]
+fn amber_outlives_the_compost() {
+    let mut w = World::new(31);
+    // A short-lived learner: the empiricist stripped of reproduction,
+    // with no extra funding — it will starve within ~30 ticks.
+    let monk: String = metabolite::genesis::EMPIRICIST
+        .lines()
+        .filter(|l| !l.contains("spawn") && !l.contains("give"))
+        .collect::<Vec<_>>()
+        .join("\n");
+    let id = w.inject("doomed-learner", &monk).unwrap();
+    for _ in 0..120 {
+        w.tick();
+    }
+    assert!(!w.agents[id].alive, "the learner must have died");
+    assert!(
+        w.amber.iter().any(|e| e.contains("answer(")),
+        "its oracle genes must be preserved in amber"
+    );
+    // Flood the ordinary compost with thousands of ordinary deaths.
+    for _ in 0..4000 {
+        w.tick();
+    }
+    assert!(
+        w.amber.iter().any(|e| e.contains("answer(")),
+        "the amber must still hold minds long after the churn"
+    );
+}
+
 /// Cassettes: multi-line compost entries splice as one block, so a
 /// coordinated strategy (a declaration and the gene that needs it) can be
 /// inherited intact. Iteration-1 forensics showed single-line splicing
@@ -239,7 +271,7 @@ fn compost_cassettes_keep_coordinated_genes_together() {
     let mut intact = 0;
     let mut torn_viable = 0;
     for _ in 0..2000 {
-        let (child, _) = genome::mutate(host, &mut rng, &compost);
+        let (child, _) = genome::mutate(host, &mut rng, &compost, &Default::default());
         if child.contains("peek(") {
             if child.contains("let t = 0") {
                 intact += 1;

@@ -431,6 +431,42 @@ The iteration's ledger: the learner class CAN stand (observed once);
 what it lacks is a renewal channel that doesn't require the end of the
 world. That is the next frontier the loop inherits.
 
+## Round 11 — loop iteration 5: amber, and the resurrection of minds
+
+Iteration 4's frontier: a renewal channel for intelligence that doesn't
+require the end of the world. The mechanism: **amber** — a 64-entry
+protected stratum of the compost preserving every oracle-touching gene
+and cassette indefinitely (only newer amber displaces older amber), with
+a quarter of all mutation splices drawing from it. The compost forgets;
+the amber does not. Pinned by test: a doomed learner's genes survive
+4,000 ticks of monoculture churn.
+
+**The A/B against iteration 4's baselines (three flagship seeds, 200K):**
+
+- **Eleven amber-splice solves** — resurrections: organisms whose last
+  mutation reads "spliced a gene from the amber," solving. On seed 1618
+  the world's FIRST solve arrived by resurrection (tick 29,351, a
+  gen-41 grazer). On seed 7 the world's first tier-II solve came
+  directly from an amber splice. On seed 271, two resurrections landed
+  in the final 15K ticks of a world whose baseline had been silent.
+- **Late-epoch silence broken on 2 of 3 seeds**: seed 7 went 0 → 10
+  solves after tick 150K; seed 271 went 0 → 6 (including its first
+  tier-III, at tick 154,812). Seed 1618 regressed there (2 → 0) while
+  front-loading — amber is a strong but not universal cure, honestly
+  logged.
+- **Every intelligence metric moved**: total solves 39/10/4 by tier
+  across the trio (baseline ~27 total); warmth ~228K vs ~57K; carriers
+  alive at final census 4 (baseline 1 — and that 1 was the first ever);
+  learning-loop descendants 117-166 per seed (baseline 1-8), deepest
+  descent **generation 58** (baseline 3). Amber saturated 64/64 on all
+  seeds.
+
+The arc the loop has now built, layer by layer: energy became money
+(genesis), money selected genes (rounds 1-5), genes learned to learn
+(rounds 8-9), and now the learned dead are a library the living splice
+from. The amber is this world's first cultural institution — and its
+worlds no longer need apocalypse to remember how to think.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the

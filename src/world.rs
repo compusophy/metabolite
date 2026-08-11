@@ -61,6 +61,8 @@ pub struct World {
     pub scent: Vec<i64>,
     pub oracles: Vec<Oracle>,
     pub compost: VecDeque<String>,
+    /// The compost's protected stratum: oracle-touching genes only.
+    pub amber: VecDeque<String>,
     pub feed: Feed,
     pub counters: Counters,
     pub history: VecDeque<(u64, u32, u64, u64)>,
@@ -95,6 +97,7 @@ impl World {
             scent: vec![0; CELLS],
             oracles: Vec::new(),
             compost: VecDeque::new(),
+            amber: VecDeque::new(),
             feed: Feed::new(EVENTS_CAP),
             counters: Counters::default(),
             history: VecDeque::new(),
@@ -376,7 +379,8 @@ impl World {
             }
             None => self.agents[me].genome.clone(),
         };
-        let (child_src, mut desc) = genome::mutate(&base, &mut self.rng, &self.compost);
+        let (child_src, mut desc) =
+            genome::mutate(&base, &mut self.rng, &self.compost, &self.amber);
         if let Some(m) = mate {
             desc = format!("{desc}, crossed with #{m}");
         }
@@ -603,7 +607,16 @@ impl World {
             }
             compost.push_back(entry);
         };
+        let mut amber = |amber_ring: &mut std::collections::VecDeque<String>, entry: &String| {
+            if entry.contains("answer(") {
+                if amber_ring.len() == AMBER_CAP {
+                    amber_ring.pop_front();
+                }
+                amber_ring.push_back(entry.clone());
+            }
+        };
         for line in &lines {
+            amber(&mut self.amber, line);
             push(&mut self.compost, line.clone());
         }
         if lines.len() >= 2 {
@@ -611,7 +624,9 @@ impl World {
                 let len = 2 + self.rng.below(2) as usize; // 2 or 3 lines
                 let start = self.rng.below((lines.len() + 1 - len.min(lines.len())) as u64) as usize;
                 let end = (start + len).min(lines.len());
-                push(&mut self.compost, lines[start..end].join("\n"));
+                let block = lines[start..end].join("\n");
+                amber(&mut self.amber, &block);
+                push(&mut self.compost, block);
             }
         }
         let a = &mut self.agents[me];

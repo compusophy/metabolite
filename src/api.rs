@@ -66,6 +66,7 @@ pub fn state_json(w: &World, paused: bool, tps: u64) -> String {
         n("agentErg", w.ledger.total_agent_erg()),
         n("cellErg", w.ledger.total_cell_erg()),
         n("compost", w.compost.len()),
+        n("amber", w.amber.len()),
         format!(
             "\"burns\":{}",
             obj(vec![
