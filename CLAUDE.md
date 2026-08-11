@@ -45,7 +45,8 @@ src/mind.rs      wit: lexer, depth-guarded parser, fueled tree-walk eval,
 src/laws.rs      every constant + oracle formulas (the physics, one place)
 src/ledger.rs    ALL ergs live here; conservation invariant; golden tithe
 src/world.rs     grid/torus, sun (integer trig), tick loop, spawn/death,
-                 compost, regenesis-after-extinction, world hash (FNV)
+                 compost + stratified amber (fossil gene library; a
+                 formula can never evict a mind), regenesis, hash (FNV)
 src/host.rs      the capability table (18 caps = the COMPLETE effect
                  surface) + TickHost + run_agent (tank escrow/settle)
 src/genome.rs    line-level mutation ops + codons + crossover + grammar gate
@@ -59,8 +60,10 @@ src/wasm.rs      hand-rolled C ABI over api (wasm32 only; no bindgen)
 scripts/wasm.sh  world -> wasm -> one static dist/index.html (fetch shim)
 src/lib.rs       module roots + physics_card()   src/main.rs  CLI
 web/index.html   the observatory (single file, compiled in via include_str!)
-tests/physics.rs determinism, conservation, named exploits, scholar-solves,
-                 and wit's own semantics (fuel exactness, checked math)
+tests/physics.rs determinism, conservation, named exploits, learning
+                 (empiricist solves tier III by feedback), amber, bequest,
+                 heist, and wit's own semantics (unbound reads are 0 —
+                 a torn gene is dead, not fatal; round 14)
 ```
 
 ## Gotchas (each cost a real debugging session — keep them true)
@@ -89,7 +92,7 @@ tests/physics.rs determinism, conservation, named exploits, scholar-solves,
 ## Build / verify
 
 ```sh
-cargo test --release          # 15 tests: physics + wit semantics, ~2s
+cargo test --release          # 25 tests: physics + wit semantics, ~2s
 bash scripts/caps.sh          # the constitution
 cargo run --release -- run --ticks 20000 --seed 7   # the world as one integer
 ```

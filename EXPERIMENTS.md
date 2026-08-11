@@ -604,6 +604,30 @@ words) — abstract, results, the new composability law (law 10:
 composability converts lineage depth into cross-species spread), and
 the depth-vs-spread trade in Limitations.
 
+## Round 16 — loop iteration 10: deep time (partial, and good)
+
+The first half-million-tick horizon. One flagship delivered (seed 7,
+truncated at ~452K by the harness — the two other runs died with their
+supervising agents; noted for ops: background simulations must live in
+the orchestrator's session, not a subagent's).
+
+**Seed 7's five-era verdict: intelligence sustains.** Solves per
+100K-tick era: 10, 13, 9, 6, and 5 in the final half-era — a per-tick
+rate in era 5 comparable to the founding eras. Totals at 450K:
+[28, 10, 4] with warmth 216,340; 27 of 43 dumped solves were learner
+genomes; 13 deep-learner solves; learning-loop descent to gen 351.
+
+**The late-history novelty is the designed one**: all five
+resurrected-learner solves occurred AFTER tick 300K — including a
+gen-85 amber-spliced learner solving at tick 451,863 with the full
+adaptive-search loop (widening exploration, step-size annealing). In
+deep time, resurrection is not a curiosity; it is the renewal channel
+that keeps old worlds thinking, precisely what the amber was built for
+and never before observed at this depth.
+
+Also this hour: CLAUDE.md refreshed to the current world (stratified
+amber, reads-as-zero, 25 tests) — the surface cap holds at 5,560/8,000.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the
