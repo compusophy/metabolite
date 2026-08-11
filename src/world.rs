@@ -45,6 +45,9 @@ pub struct Oracle {
     pub tier: usize,
     pub cell: usize,
     pub x_val: i64,
+    /// Secret instance coefficients: drawn at spawn, die at respawn.
+    pub a: i64,
+    pub b: i64,
     pub expires: u64,
 }
 
@@ -99,11 +102,13 @@ impl World {
         };
         // Oracles: one per slot, tiers expanded in order.
         let mut slot = 0;
-        for (tier, &(count, _escrow, _m)) in ORACLE_TIERS.iter().enumerate() {
+        for (tier, &(count, _escrow, m)) in ORACLE_TIERS.iter().enumerate() {
             for _ in 0..count {
                 let cell = w.free_oracle_cell();
                 let x_val = w.roll_oracle_x(tier);
-                w.oracles.push(Oracle { tier, cell, x_val, expires: ORACLE_TTL });
+                let a = 1 + w.rng.below(ORACLE_A_CEIL[tier]) as i64;
+                let b = w.rng.below(m as u64) as i64;
+                w.oracles.push(Oracle { tier, cell, x_val, a, b, expires: ORACLE_TTL });
                 w.ledger.mint_escrow(slot, ORACLE_TIERS[tier].1);
                 slot += 1;
             }
@@ -400,7 +405,7 @@ impl World {
         let Some(slot) = self.oracles.iter().position(|o| o.cell == cell) else { return -1 };
         let o = &self.oracles[slot];
         let tier = o.tier;
-        let error = (y - oracle_f(tier, o.x_val)).unsigned_abs();
+        let error = (y - oracle_value(tier, o.a, o.b, o.x_val)).unsigned_abs();
         if error == 0 {
             let payout = self.ledger.escrow_to_agent(slot, me);
             self.agents[me].income += payout;
@@ -431,7 +436,9 @@ impl World {
         let tier = self.oracles[slot].tier;
         let cell = self.free_oracle_cell();
         let x_val = self.roll_oracle_x(tier);
-        self.oracles[slot] = Oracle { tier, cell, x_val, expires: self.tick + ORACLE_TTL };
+        let a = 1 + self.rng.below(ORACLE_A_CEIL[tier]) as i64;
+        let b = self.rng.below(ORACLE_TIERS[tier].2 as u64) as i64;
+        self.oracles[slot] = Oracle { tier, cell, x_val, a, b, expires: self.tick + ORACLE_TTL };
         self.ledger.mint_escrow(slot, ORACLE_TIERS[tier].1);
     }
 

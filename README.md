@@ -59,10 +59,13 @@ harvest), **grazer** (chase the light), **drifter** (random walk),
 family recipe), lay scent, and spawn mutated children. Every transfer burns
 a **golden tithe of 1.618%** — wash trading is thermodynamically lossy.
 
-Ten **oracles** drift through the world paying escrowed bounties
-(500/1500/4000 ergs) for correct arithmetic — their formulas are public law, printed on the
-physics card. Nobody at genesis can solve one. Intelligence has exactly two
-ways in:
+Sixteen **oracles** drift through the world paying escrowed bounties
+(900/2000/5000 ergs) for correct arithmetic. Their formula *families* are
+public law, printed on the physics card — but every oracle instance draws
+**secret coefficients** at spawn, so nothing memorized ever solves twice.
+Near misses are paid *warmth* (each unit of error halves the payout), and
+the payout tells you how close you are: learning is legal, and it is the
+only strategy that generalizes. Intelligence has two ways in:
 
 1. **Evolution.** `spawn()` copies a genome through one line-level mutation
    — jitter a number, swap an operator, duplicate/delete/swap a line, or

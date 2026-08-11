@@ -35,12 +35,14 @@ pub fn physics_card() -> String {
         caps.push_str(&format!("  {}({params}) -> i64 · {} fuel · {}\n", cap.name, cap.cost, cap.doc));
     }
     let mut tiers = String::new();
-    let formulas = ["y = (2x + 1) mod 64", "y = (x*x + 7) mod 199", "y = (5x*x + 3x + 11) mod 509"];
+    let formulas =
+        ["y = (a*x + b) mod 64", "y = (x*x + a*x + b) mod 199", "y = (a*x*x + b*x + 11) mod 509"];
     for (t, &(count, escrow, mod_)) in ORACLE_TIERS.iter().enumerate() {
         tiers.push_str(&format!(
-            "  Oracle {} · {count} in the world · pays {escrow}e · x in [0,{mod_}) · {}\n",
+            "  Oracle {} · {count} in the world · pays {escrow}e · x in [0,{mod_}) · {} · a <= {}\n",
             ["I", "II", "III"][t],
-            formulas[t]
+            formulas[t],
+            ORACLE_A_CEIL[t]
         ));
     }
     format!(
@@ -86,7 +88,10 @@ pub fn physics_card() -> String {
          ORACLES pay escrowed bounties for computation. Each exudes {ORACLE_SCENT}\n\
          scent/tick into its cell (scent decays 1/8 per tick; emit() writes the\n\
          same field — mimicry is legal). Stand on or beside one; puzzle(dx,dy)\n\
-         reads x; answer(dx,dy,y) pays the WHOLE escrow if y is exactly:\n\
+         reads x; answer(dx,dy,y) pays the WHOLE escrow if y is exact.\n\
+         The FAMILIES are public law; the coefficients (a, b) are SECRET,\n\
+         drawn fresh for every oracle at spawn. Nothing memorized solves\n\
+         twice — the warmth of your wrong answers is the only teacher.\n\
          {tiers}\
          Near misses are paid WARMTH: each unit of error halves the payout,\n\
          and the escrow drains as it is mined (a dry oracle moves on). Blind\n\

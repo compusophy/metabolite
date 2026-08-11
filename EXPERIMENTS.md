@@ -367,6 +367,44 @@ genome-inscribed formula can ever solve twice — within-lifetime
 learning becomes the only strategy that pays, and the Baldwin
 conditions for intelligence finally hold.
 
+## Round 9 — loop iteration 3: ephemeral oracles, and the Baldwin prize
+
+Iteration 2 ended with a mission: make the world's problems ephemeral so
+learning can beat instinct. Done — **every oracle instance now draws
+secret coefficients (a, b) at spawn**. The families stay public law
+(tier I: `(ax+b) mod 64`; II: `(x²+ax+b) mod 199`; III:
+`(ax²+bx+11) mod 509`); the constants die with each oracle. Nothing
+memorized solves twice. The empiricist was pre-adapted (it never knew
+the formulas — its tier-III exam passed unchanged); the scholar is
+retired to a staged-relic test, an exhibit of the fixed-world era.
+
+**The Baldwin test (six 100K-tick seeds):**
+
+- **Learning now outsolves instinct: 17 learner solves vs 13 instinct
+  solves** — the first reversal ever. Under eternal formulas, learners
+  took ~25% of solves; on two seeds (271, 577) instinct **collapsed to
+  zero** and every solve was a warmth-feedback learner, including a
+  tier-II secret hill-climbed for 1,985e.
+- **The Baldwin prize**: seed 271, tick 34,394 — #17259, lineage 5,
+  generation 1, an inherited intact learning loop, solved. The first
+  gen>0 learner solve in the world's history. Loop descendants now
+  reach generation 3.
+- **Re-convergence observed**: #42274 solved twice in 11 ticks —
+  learning that generalizes across instances, the thing no lottery
+  ticket can do.
+- Total solve volume halved (25 vs ~50 per six seeds) — as predicted:
+  removing instance-luck removed the lottery revenue. What remains is
+  earned. Instinct persists on some seeds as deep-generation flukes
+  (gen 203, 222 carriers whose mutated constants happened to match one
+  instance once) — vestiges of a business model the physics revoked.
+
+Three iterations of the autonomous loop tell one story: locate the wall
+(iteration 1: multi-line strategies non-heritable), remove it (iteration
+2: cassette genetics — and discover transmission wasn't the binding
+constraint), then change what the world rewards (iteration 3: ephemeral
+problems) — and evolution finally chooses minds over instincts, and
+passes them on.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the

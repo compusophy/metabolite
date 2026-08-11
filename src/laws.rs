@@ -124,24 +124,29 @@ pub const MAX_AGE: u64 = 6000;
 /// can never work. At 200, a fresh oracle lands near a district camper
 /// every few dozen ticks.
 pub const ORACLE_TTL: u64 = 200;
-/// Tier definitions: (count, escrow, modulus). Formulas in `oracle_f`.
+/// Tier definitions: (count, escrow, modulus). Families in `oracle_value`.
 /// Escrows are sized so that STUDY pays: an empirical education (travel +
 /// probing to convergence) costs ~800-1,500 ergs; tier I priced below
 /// that made dynasties unaffordable (round 5's demographic transition).
 pub const ORACLE_TIERS: [(usize, u64, i64); 3] = [(8, 900, 64), (5, 2000, 199), (3, 5000, 509)];
 
-/// The oracle functions, tier-indexed. Public law: an organism (or its
-/// author) that encodes f(x) correctly gets the escrow.
-///   tier 0: y = (2x + 1) mod 64
-///   tier 1: y = (x*x + 7) mod 199
-///   tier 2: y = (5x*x + 3x + 11) mod 509
-pub fn oracle_f(tier: usize, x: i64) -> i64 {
+/// Oracle FAMILIES are public law; every oracle INSTANCE draws secret
+/// coefficients (a, b) at spawn. Iteration 2 proved that with eternal
+/// formulas, evolution inscribes the answers into DNA and learning never
+/// pays — so no formula is eternal anymore. Nothing inscribed solves
+/// twice; warmth feedback is the only teacher that generalizes.
+///   tier 0: y = (a*x + b)          mod 64,  a in 1..=8,  b in 0..64
+///   tier 1: y = (x*x + a*x + b)    mod 199, a in 1..=14, b in 0..199
+///   tier 2: y = (a*x*x + b*x + 11) mod 509, a in 1..=6,  b in 0..509
+pub fn oracle_value(tier: usize, a: i64, b: i64, x: i64) -> i64 {
     match tier {
-        0 => (2 * x + 1).rem_euclid(64),
-        1 => (x * x + 7).rem_euclid(199),
-        _ => (5 * x * x + 3 * x + 11).rem_euclid(509),
+        0 => (a * x + b).rem_euclid(64),
+        1 => (x * x + a * x + b).rem_euclid(199),
+        _ => (a * x * x + b * x + 11).rem_euclid(509),
     }
 }
+/// Per-tier ceiling for the secret `a` (drawn 1..=ceiling).
+pub const ORACLE_A_CEIL: [u64; 3] = [8, 14, 6];
 
 /// Compost: dead genomes' lines, scavengeable by mutation (ring buffer).
 pub const COMPOST_CAP: usize = 256;

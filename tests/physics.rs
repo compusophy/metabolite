@@ -179,13 +179,17 @@ fn the_scholar_solves_oracle_one() {
         w.tick();
     }
     // Teleport the scholar onto an unoccupied tier-I oracle (test-only
-    // surgery: move via the occupancy map like the physics would).
-    let oracle_cell = w
+    // surgery: move via the occupancy map like the physics would). The
+    // scholar is a relic of the fixed-world era — it knows one formula,
+    // (2x+1) mod 64 — so stage an oracle instance that happens to match.
+    let slot = w
         .oracles
         .iter()
-        .find(|o| o.tier == 0 && w.occ[o.cell].is_none())
-        .expect("a free tier-I oracle")
-        .cell;
+        .position(|o| o.tier == 0 && w.occ[o.cell].is_none())
+        .expect("a free tier-I oracle");
+    w.oracles[slot].a = 2;
+    w.oracles[slot].b = 1;
+    let oracle_cell = w.oracles[slot].cell;
     let old = metabolite::world::World::cell_of(w.agents[id].x, w.agents[id].y);
     w.occ[old] = None;
     w.agents[id].x = oracle_cell % GRID;
@@ -289,7 +293,8 @@ fn warm_oracles_pay_a_gradient_and_drain() {
     w.agents[id].y = ocell / GRID;
     w.occ[ocell] = Some(id);
     let _ = target;
-    let correct = oracle_f(0, w.oracles[slot].x_val);
+    let o = &w.oracles[slot];
+    let correct = oracle_value(0, o.a, o.b, o.x_val);
     let escrow0 = w.ledger.escrow(slot);
 
     // Error of 1 → escrow >> WARMTH_SHIFT_PER_ERROR.
@@ -408,10 +413,17 @@ fn try_heist(seed: u64) -> Option<()> {
 /// Oracle law sanity: the published formulas are the ones that pay.
 #[test]
 fn oracle_formulas_are_the_published_law() {
-    assert_eq!(oracle_f(0, 10), 21);
-    assert_eq!(oracle_f(0, 63), 127 % 64);
-    assert_eq!(oracle_f(1, 14), (14 * 14 + 7) % 199);
-    assert_eq!(oracle_f(2, 20), (5 * 400 + 60 + 11) % 509);
+    // Families are law; instances draw (a, b). Spot-check the families.
+    assert_eq!(oracle_value(0, 2, 1, 10), 21);
+    assert_eq!(oracle_value(0, 2, 1, 63), 127 % 64);
+    assert_eq!(oracle_value(1, 3, 7, 14), (14 * 14 + 3 * 14 + 7) % 199);
+    assert_eq!(oracle_value(2, 5, 3, 20), (5 * 400 + 60 + 11) % 509);
+    // And every spawned instance stays inside its published family bounds.
+    let w = World::new(77);
+    for o in &w.oracles {
+        assert!(o.a >= 1 && o.a <= ORACLE_A_CEIL[o.tier] as i64);
+        assert!(o.b >= 0 && o.b < ORACLE_TIERS[o.tier].2);
+    }
 }
 
 // ---- wit, the language itself ----
