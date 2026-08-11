@@ -611,13 +611,21 @@ impl<'a> Eval<'a> {
         match e {
             Expr::Int(v) => Ok(Value::Int(*v)),
             Expr::Bool(b) => Ok(Value::Bool(*b)),
-            Expr::Var(name) => self
+            // An unbound name reads as 0. This is a deliberate genetics
+            // decision, not laxity: gene splices routinely tear a line
+            // from the `let` it referenced, and when that read was fatal
+            // (E-UNDEF, whole tank forfeited) most horizontal transfer of
+            // multi-line cognition was poison — round 13 found the amber's
+            // mind-reserve full of it. A torn gene is now a dead gene, not
+            // a fatal one: degraded, cheap, and polishable by selection.
+            // Assignment still requires a visible `let`.
+            Expr::Var(name) => Ok(self
                 .vars
                 .iter()
                 .rev()
                 .find(|(n, _)| n == name)
                 .map(|(_, v)| *v)
-                .ok_or_else(|| Diag::new("E-UNDEF", format!("`{name}` has no visible `let`"), NO_SPAN)),
+                .unwrap_or(Value::Int(0))),
             Expr::Call(name, args, span) => {
                 let caps = self.host.caps();
                 let idx = caps

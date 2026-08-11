@@ -535,6 +535,43 @@ Also this hour, in the family tradition — the paper is the product:
 fuel=money to the ephemerality law, negatives first-class, every figure
 sourced from this notebook, reproduction commands with expected hashes.
 
+## Round 14 — loop iteration 8: reads-as-zero, and the resurrection of learners
+
+Round 13 found the amber's mind-reserve full of runtime poison: spliced
+study lines referencing an `x` whose `let` the cassette tore off — and
+in wit an unbound read was fatal (whole tank forfeited, every tick).
+The fix was a language decision: **unbound names now read as 0**
+(assignment still requires `let`). A torn gene is dead, not fatal —
+degraded, cheap, polishable. Composability at the language level.
+
+**The A/B (three flagship seeds, 200K ticks) claimed the prize six
+times over:**
+
+- **Six resurrected-learner solves** — amber-splice organisms carrying
+  the full learning machinery, a class with zero members in all prior
+  history. Among them: #149472 (gen 1) with the intact empiricist loop
+  on a light-seeking torso; #169325 (gen 7) — an amber-spliced learner
+  that **cracked oracle III**; and #120693 (gen 7, seed 271) — the
+  first true **hybrid**: the intact learning loop grafted onto a
+  SESSILE forager torso. A different species, carrying a mind.
+- **Deep learner solves: six this round** (gens 1, 7, 7, 48, 79, 109)
+  vs exactly one in all previous history combined.
+- Seed 7: 23 solves [14,6,3] vs 14 baseline, warmth 147,846 (~2x), 9
+  carriers alive at census (record). Several working loops carry
+  mutation scars (store(19,...), answer(18,0,...), thresholds jittered)
+  that only function because unbound reads are 0 — selection is already
+  polishing degraded fragments, exactly as designed.
+- The honest trade: pure-line depth fell (deepest loop-gen 118-339 vs
+  467-476), and seed 1618 mixed ([7,5,0]). Composability converts
+  single-lineage accumulation into CROSS-TORSO SPREAD — the loop now
+  migrates between species instead of piling up in one. Minds became
+  organs: modular, portable, grafted across the tree of life by a
+  library and a splice.
+
+Fourteen rounds ago this world could not add. It now resurrects dead
+mathematicians into farmers' bodies, and they solve quadratics for
+money.
+
 ## Standing answers
 
 - **Q1 (does evolution beat drift?)** Efficiency: no. Strategy: yes — the

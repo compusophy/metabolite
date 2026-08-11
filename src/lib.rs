@@ -55,7 +55,9 @@ pub fn physics_card() -> String {
          Operators: + - * / % comparisons == != && || ! parentheses.\n\
          Comments: // and /* */. No while, no functions, no recursion:\n\
          every wit program halts. Arithmetic is CHECKED — overflow or /0\n\
-         CRASHES the tick and you forfeit the whole tank.\n\
+         CRASHES the tick and you forfeit the whole tank. Unbound names\n\
+         read as 0 (a torn gene is dead, not fatal); assignment still\n\
+         needs a visible `let`.\n\
          \n\
          FUEL IS MONEY. Each tick your mind runs with fuel = min(balance, {TANK_CAP}).\n\
          Every statement and expression node burns 1; capabilities burn their\n\

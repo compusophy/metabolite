@@ -557,7 +557,11 @@ mod wit {
         assert_eq!(code("print 1 + true;"), "E-TYPE");
         assert_eq!(code("if 1 { }"), "E-TYPE");
         assert_eq!(code("repeat -1 { }"), "E-NEGREP");
-        assert_eq!(code("print nope;"), "E-UNDEF");
+        // Unbound reads are 0 — a torn gene is dead, not fatal (round 14).
+        assert_eq!(out("print nope;"), "0\n");
+        assert_eq!(out("if ghost >= 0 { print 1; }"), "1\n");
+        // Assignment still requires a visible let.
+        assert_eq!(code("nope = 1;"), "E-UNDEF");
         assert_eq!(code("nope();"), "E-CAP");
         assert_eq!(code("next(1);"), "E-ARGS");
     }
